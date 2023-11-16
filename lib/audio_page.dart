@@ -27,8 +27,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
   void initState() {
     super.initState();
     _audioManager = AudioManager(widget.widget.details);
-    volumeBar =
-        VolumeBar(player: _audioManager.getAudioPlayer(), isWhite: true);
+    volumeBar = VolumeBar(player: _audioManager.getAudioPlayer());
   }
 
   @override
@@ -193,6 +192,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
           stream: _audioManager.getAudioPlayer().speedStream,
           builder: (context, snapshot) => IconButton(
             icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
+                maxLines: 1,
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             iconSize: 25.0,
             onPressed: () {

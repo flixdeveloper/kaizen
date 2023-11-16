@@ -20,6 +20,8 @@ class _NotesScreen extends State<NotesScreen>
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
+            child: Padding(
+      padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -27,7 +29,7 @@ class _NotesScreen extends State<NotesScreen>
             Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
-                    padding: const EdgeInsets.fromLTRB(50, 80, 50, 0),
+                    padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -61,6 +63,7 @@ class _NotesScreen extends State<NotesScreen>
                             child: const Text(
                               "What's on your mind?",
                               style: TextStyle(
+                                fontWeight: FontWeight.bold,
                                 fontSize: 18,
                               ),
                             ),
@@ -220,7 +223,7 @@ class _NotesScreen extends State<NotesScreen>
                           ),
                         ])))
           ]),
-    ));
+    )));
   }
 
   void newNoteClick(List<String> quastions, String title) {

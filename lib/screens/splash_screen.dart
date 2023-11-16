@@ -110,7 +110,8 @@ class _SplashScreenState extends State<SplashScreen>
                                           .colorScheme
                                           .primary),
                                 ),
-                                if (sentence.length == 2) const SizedBox(height: 10),
+                                if (sentence.length == 2)
+                                  const SizedBox(height: 10),
                                 if (sentence.length == 2)
                                   Text(
                                     "~ ${sentence[1]}",
@@ -149,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen>
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding:
-                      const EdgeInsets.fromLTRB(0, 0, 0, 10), //add padding here
+                      const EdgeInsets.fromLTRB(0, 0, 0, 40), //add padding here
                   //change padding to be only from bottom?
                   child: Text(
                     'TAP TO DISMISS',

@@ -142,7 +142,8 @@ Widget reminderPick(
                             : 0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.tertiary,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onSurface,
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(20), // Rounded edge

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaizen/firebase_handle.dart';
-import 'package:kaizen/rounded.dart';
-
+import 'package:kaizen/rounded_base.dart';
 import 'package:kaizen/screens/notes_screen.dart';
 
 part 'note.g.dart';
@@ -59,7 +58,6 @@ class Note {
                         style: const TextStyle(
                           fontFamily: 'RobotoCondensed',
                         )),
-                    context,
                     5,
                     5,
                     color: Theme.of(context).colorScheme.secondary,
@@ -74,7 +72,6 @@ class Note {
             child: Text(answear[0]),
           )
         ]),
-        context,
         20,
         20);
   }

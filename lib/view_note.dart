@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaizen/note.dart';
-import 'package:kaizen/rounded.dart';
+import 'package:kaizen/rounded_base.dart';
 
 late List<TextEditingController> answears;
 
@@ -68,7 +68,6 @@ Widget buildNewNote(
                               maxLines: null,
                               controller: answears[index],
                             ),
-                            context,
                             15,
                             15),
                         const SizedBox(height: 30)
@@ -156,7 +155,6 @@ Widget buildUpdateNote(BuildContext context, Note note) {
                               maxLines: null,
                               controller: answears[index],
                             ),
-                            context,
                             15,
                             15),
                         const SizedBox(height: 30)
@@ -192,12 +190,12 @@ Widget buildViewNote(BuildContext context, Note note) {
         appBar: AppBar(),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 25, 40, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 25, 15, 0),
                     child: Align(
                       alignment: Alignment.topRight,
                       child: Text(date,
@@ -208,7 +206,7 @@ Widget buildViewNote(BuildContext context, Note note) {
                           )),
                     )),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 30, 40, 25),
+                  padding: const EdgeInsets.fromLTRB(50, 30, 40, 25),
                   child: Text(
                     title,
                     textAlign: TextAlign.start,

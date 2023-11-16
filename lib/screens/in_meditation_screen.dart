@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:kaizen/screens/meditation_screen.dart';
@@ -98,6 +100,8 @@ class _InMeditationScreen extends State<InMeditationScreen>
 
   @override
   void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     widget.timer.cancel();
     widget.musicPlayer.dispose();
     widget.bellPlayer.dispose();
@@ -107,126 +111,137 @@ class _InMeditationScreen extends State<InMeditationScreen>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => {
-              if (!(widget.isBellPaused || widget.isSoundPaused))
-                setState(() {
-                  finishedAnimation = false;
-                  visible = !visible;
-                })
-            },
-        child: Scaffold(
-            backgroundColor: Colors.black,
-            body: TweenAnimationBuilder(
-              onEnd: () => {finishedAnimation = true},
-              tween: Tween<double>(begin: 1, end: visible ? 1 : 0),
-              duration: const Duration(milliseconds: 500),
-              builder: (context, opacity, _) {
-                return Opacity(
-                  opacity: opacity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 80),
-                          child: Text(
-                            "Meditation",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontFamily: 'Lato',
-                            ),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Countdown(
-                          seconds: duration.inSeconds,
-                          build: (BuildContext context, double time) => Text(
-                            printDuration(Duration(seconds: time.round())),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 50,
-                              fontFamily: 'PTSans',
-                            ),
-                          ),
-                          interval: const Duration(milliseconds: 100),
-                          onFinished: () {
-                            finishMeditation();
-                          },
-                          controller: widget.timerControlller,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              ValueListenableBuilder<ButtonState>(
-                                valueListenable: widget.buttonNotifier,
-                                builder: (_, value, __) {
-                                  if (value == ButtonState.paused) {
-                                    return widget.volumeBar;
-                                  } else {
-                                    return Container();
-                                  }
-                                },
+    return WillPopScope(
+      //forbidden swipe in iOS(my ThemeData(platform: TargetPlatform.iOS,)
+      onWillPop: () async => (Platform.isIOS) ? false : true,
+      child: GestureDetector(
+          onTap: () => {
+                if (!(widget.isBellPaused || widget.isSoundPaused))
+                  setState(() {
+                    finishedAnimation = false;
+                    visible = !visible;
+                    if (visible)
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                          overlays: SystemUiOverlay.values);
+                  })
+              },
+          child: Scaffold(
+              backgroundColor: Colors.black,
+              body: TweenAnimationBuilder(
+                onEnd: () => {
+                  if (!visible)
+                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive),
+                  finishedAnimation = true
+                },
+                tween: Tween<double>(begin: 1, end: visible ? 1 : 0),
+                duration: const Duration(milliseconds: 500),
+                builder: (context, opacity, _) {
+                  return Opacity(
+                    opacity: opacity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 80),
+                            child: Text(
+                              "Meditation",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontFamily: 'Lato',
                               ),
-                              const SizedBox(width: 15),
-                              if (visible || !finishedAnimation)
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Countdown(
+                            seconds: duration.inSeconds,
+                            build: (BuildContext context, double time) => Text(
+                              printDuration(Duration(seconds: time.round())),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 50,
+                                fontFamily: 'PTSans',
+                              ),
+                            ),
+                            interval: const Duration(milliseconds: 100),
+                            onFinished: () {
+                              finishMeditation();
+                            },
+                            controller: widget.timerControlller,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                ValueListenableBuilder<ButtonState>(
+                                  valueListenable: widget.buttonNotifier,
+                                  builder: (_, value, __) {
+                                    if (value == ButtonState.paused) {
+                                      return widget.volumeBar;
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                ),
+                                const SizedBox(width: 15),
+                                if (visible || !finishedAnimation)
+                                  ValueListenableBuilder<ButtonState>(
+                                    valueListenable: widget.buttonNotifier,
+                                    builder: (_, value, __) {
+                                      if (value == ButtonState.paused) {
+                                        return IconButton(
+                                          icon: const Icon(Icons.play_arrow),
+                                          color: Colors.white,
+                                          iconSize: 35.0,
+                                          onPressed: playClicked,
+                                        );
+                                      } else {
+                                        return IconButton(
+                                          icon: const Icon(Icons.pause),
+                                          color: Colors.white,
+                                          iconSize: 35.0,
+                                          onPressed: pauseClicked,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                const SizedBox(width: 15),
                                 ValueListenableBuilder<ButtonState>(
                                   valueListenable: widget.buttonNotifier,
                                   builder: (_, value, __) {
                                     if (value == ButtonState.paused) {
                                       return IconButton(
-                                        icon: const Icon(Icons.play_arrow),
+                                        iconSize: 35,
                                         color: Colors.white,
-                                        iconSize: 35.0,
-                                        onPressed: playClicked,
+                                        icon: const Icon(Icons.stop),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
                                       );
                                     } else {
-                                      return IconButton(
-                                        icon: const Icon(Icons.pause),
-                                        color: Colors.white,
-                                        iconSize: 35.0,
-                                        onPressed: pauseClicked,
-                                      );
+                                      return Container();
                                     }
                                   },
                                 ),
-                              const SizedBox(width: 15),
-                              ValueListenableBuilder<ButtonState>(
-                                valueListenable: widget.buttonNotifier,
-                                builder: (_, value, __) {
-                                  if (value == ButtonState.paused) {
-                                    return IconButton(
-                                      iconSize: 35,
-                                      color: Colors.white,
-                                      icon: const Icon(Icons.stop),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
-                                },
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            )));
+                      ],
+                    ),
+                  );
+                },
+              ))),
+    );
   }
 
   Future<void> startMeditation() async {

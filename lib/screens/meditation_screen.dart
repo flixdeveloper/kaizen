@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:kaizen/firebase_handle.dart';
-import 'package:kaizen/rounded.dart';
+import 'package:kaizen/rounded_base.dart';
 import 'package:kaizen/screens/in_meditation_screen.dart';
 import 'package:kaizen/volume_controller.dart';
 
@@ -77,7 +77,6 @@ class _MeditationScreen extends State<MeditationScreen>
                         ////////////////////////////////////
                       ],
                     ),
-                    context,
                     15,
                     10),
               ),
@@ -92,7 +91,6 @@ class _MeditationScreen extends State<MeditationScreen>
                       //TODO: reminder
                     ],
                   ),
-                  context,
                   15,
                   10),
               const SizedBox(height: 10),
@@ -106,7 +104,6 @@ class _MeditationScreen extends State<MeditationScreen>
                       //TODO: reminder
                     ],
                   ),
-                  context,
                   15,
                   10),
             ],

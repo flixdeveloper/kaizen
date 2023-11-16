@@ -10,7 +10,7 @@ import 'package:kaizen/habit.dart';
 import 'package:kaizen/icon_pick.dart';
 import 'package:kaizen/notification_service.dart';
 import 'package:kaizen/reminder.dart';
-import 'package:kaizen/rounded.dart';
+import 'package:kaizen/rounded_base.dart';
 import 'package:kaizen/screens/habits_me_screen.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:weekday_selector/weekday_selector.dart';
@@ -63,16 +63,16 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-      //refresh the states of Parent from ModalBottomSheet in flutter
-      return Scaffold(
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
           appBar: AppBar(
             title: const Text('New Habit'),
           ),
           body: SingleChildScrollView(
             child: Padding(
-                padding: const EdgeInsets.fromLTRB(80, 35, 80, 20), //add padding here
+                padding: const EdgeInsets.fromLTRB(
+                    80, 35, 80, 20), //add padding here
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -103,7 +103,6 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                   maxLines: null,
                                   controller: titleController,
                                 ),
-                                context,
                                 0,
                                 10),
                             const SizedBox(height: 10),
@@ -132,9 +131,8 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                       //reminder
                                     ],
                                   ),
-                                  context,
                                   15,
-                                  15),
+                                  10),
                             ),
                             const SizedBox(height: 25),
                             ToggleSwitch(
@@ -162,9 +160,8 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                     //TODO: reminder
                                   ],
                                 ),
-                                context,
                                 15,
-                                15),
+                                10),
                             const SizedBox(height: 10),
                             Visibility(
                               visible: frequency == 'Daily',
@@ -196,6 +193,7 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                 ],
                               ),
                             ),
+
                             Rounded(
                                 Row(
                                   mainAxisAlignment:
@@ -206,6 +204,7 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                     const Spacer(),
                                     //var list = [for (var i = 1; i <= 10; i++) i];
                                     //buildDropdownGoal(() => setState(() {})),
+
                                     CartStepperInt(
                                       value: goal,
                                       size: 24,
@@ -220,9 +219,9 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                     //reminder
                                   ],
                                 ),
-                                context,
                                 25,
-                                15),
+                                10),
+
                             const SizedBox(height: 25),
                             Rounded(
                                 Column(
@@ -325,9 +324,8 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                             const SizedBox(height: 10),
                                           ])),
                                     ]),
-                                context,
                                 2,
-                                15),
+                                10),
 
                             const SizedBox(height: 35),
                             ElevatedButton(
@@ -387,8 +385,8 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                         )),
                   ],
                 )),
-          ));
-    });
+          )),
+    );
   }
 
   Widget buildDropdownFreq(Function setState) {

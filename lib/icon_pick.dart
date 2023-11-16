@@ -28,20 +28,18 @@ Widget iconPick(BuildContext context, Function refreshParent) {
         ),
         body: SingleChildScrollView(
           child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Align(
-                    alignment: Alignment(-0.7, 0),
+                    alignment: Alignment(-0.65, 0),
                     child: Text(
                       "Icons:",
-                      style: TextStyle(fontSize: 25),
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 12),
                   Center(
                       child: Wrap(
                           spacing: 12.0, // gap between adjacent chips

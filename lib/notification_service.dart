@@ -39,7 +39,7 @@ class NotificationService {
             importance: Importance.max),
         iOS: DarwinNotificationDetails(attachments: [
           DarwinNotificationAttachment(
-              await getImageFromAssets('assets/icons/habit_icon ($icon).png'))
+              await getImageFromAssets(icon.toString()))
         ]));
   }
 
@@ -58,15 +58,18 @@ class NotificationService {
     }
   }
 
-  Future<String> getImageFromAssets(String asset) async {
-    final byteData = await rootBundle.load(asset);
-
-    final file = File(
-        '${(await getTemporaryDirectory()).path}/${asset.split('/').last}');
-    await file.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-
-    return file.path;
+  Future<String> getImageFromAssets(String icon) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final path = "${dir.path}/icon_$icon";
+    final file = File(path);
+    if (await file.exists()) {
+      return path;
+    }
+    final imageBytes =
+        await rootBundle.load('assets/icons/habit_icon ($icon).png');
+    final bytes = imageBytes.buffer.asUint8List();
+    await file.writeAsBytes(bytes);
+    return path;
   }
 
   Future showNotification(

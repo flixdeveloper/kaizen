@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kaizen/article_page.dart';
 import 'package:kaizen/audio_page.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -33,7 +34,7 @@ class HomeWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (contetxt) => buildArticle(context),
+        builder: (contetxt) => ArticleView(this),
       ),
     );
   }
@@ -54,52 +55,6 @@ class HomeWidget {
         builder: (contetxt) => AudioPlayer(this),
       ),
     );
-  }
-
-  Widget buildArticle(BuildContext context) {
-    details = details.replaceAll(r'\n', '\n');
-    return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-      //refresh the states of Parent from ModalBottomSheet in flutter
-      return Scaffold(
-          appBar: AppBar(),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                AspectRatio(
-                    aspectRatio: 15 / 9,
-                    child: Positioned.fill(
-                      child: CachedNetworkImage(
-                        imageUrl: background,
-                        fit: BoxFit.cover,
-                      ),
-                    )),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
-                  child: Column(
-                    children: [
-                      Text(title,
-                          style: const TextStyle(
-                            fontSize: 32,
-                            fontFamily: 'Lato',
-                            fontWeight: FontWeight.bold,
-                          )),
-                      const SizedBox(height: 15),
-                      Text(
-                        details,
-                        style: const TextStyle(
-                          fontSize: 21,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ));
-    });
   }
 
   Future<void> launchUrl(BuildContext context) async {

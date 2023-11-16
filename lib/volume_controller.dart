@@ -5,8 +5,10 @@ import 'package:just_audio/just_audio.dart';
  * PlayerBar is a widget that contains the player controls.
  *
  */
+
+// ignore: must_be_immutable
 class VolumeBar extends StatefulWidget {
-  late final Function clear;
+  late Function clear;
   final AudioPlayer player;
   final bool isWhite;
   // ignore: prefer_const_constructors_in_immutables
@@ -131,7 +133,7 @@ class _PlayerBarState extends State<VolumeBar> with TickerProviderStateMixin {
         return IconButton(
           color: widget.isWhite
               ? Colors.white
-              : Theme.of(context).colorScheme.onPrimary,
+              : Theme.of(context).colorScheme.onSurface,
           onPressed: () {
             if (_showVolumeBox) {
               hideVolumeBox();

@@ -4,7 +4,7 @@ import 'package:kaizen/add_habit.dart';
 import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/habit.dart';
 import 'package:kaizen/notification_service.dart';
-import 'package:kaizen/rounded.dart';
+import 'package:kaizen/rounded_base.dart';
 
 late List<Habit> habits;
 
@@ -47,58 +47,62 @@ class _HabitsMeScreen extends State<HabitsMeScreen>
         },
         child: const Icon(Icons.add),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(50, 80, 50, 50),
-              child: Text(
-                "Habits",
-                style: TextStyle(
-                  fontSize: 35,
-                  fontFamily: 'PTSans',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            if (daily.isNotEmpty)
+      body: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
               const Padding(
-                padding: EdgeInsets.fromLTRB(80, 0, 80, 10),
+                padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
                 child: Text(
-                  'Daily',
+                  "Habits",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 35,
+                    fontFamily: 'PTSans',
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-            if (daily.isNotEmpty) GroupHabits(daily),
-            if (weekly.isNotEmpty)
-              const Padding(
-                padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
-                child: Text(
-                  'Weekly',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+              if (daily.isNotEmpty)
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(80, 0, 80, 10),
+                  child: Text(
+                    'Daily',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
-              ),
-            if (weekly.isNotEmpty) GroupHabits(weekly),
-            if (monthly.isNotEmpty)
-              const Padding(
-                padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
-                child: Text(
-                  'Monthly',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+              if (daily.isNotEmpty) GroupHabits(daily),
+              if (weekly.isNotEmpty)
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
+                  child: Text(
+                    'Weekly',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
-              ),
-            if (monthly.isNotEmpty) GroupHabits(monthly),
-          ],
+              if (weekly.isNotEmpty) GroupHabits(weekly),
+              if (monthly.isNotEmpty)
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
+                  child: Text(
+                    'Monthly',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              if (monthly.isNotEmpty) GroupHabits(monthly),
+              const SizedBox(height: 15)
+            ],
+          ),
         ),
       ),
     );
@@ -225,7 +229,6 @@ class _HabitsMeScreen extends State<HabitsMeScreen>
                 }),
           ],
         ),
-        context,
         20,
         20,
         round: 20);

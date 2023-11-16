@@ -1,4 +1,6 @@
+//import 'package:device_preview/device_preview.dart'; //
 import 'package:firebase_core/firebase_core.dart';
+//import 'package:flutter/foundation.dart'; //
 import 'package:flutter/material.dart';
 import 'package:kaizen/firebase_options.dart';
 import 'package:kaizen/habit.dart';
@@ -23,7 +25,7 @@ void main() async {
   //runApp(
   //  DevicePreview(
   //    enabled: !kReleaseMode,
-  //    builder: (context) => MyApp(), // Wrap your app
+  //    builder: (context) => MyApp(),
   //  ),
   //);
 }
@@ -81,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
             boxShadow: [
               BoxShadow(
                 blurRadius: 10,
-                color: Theme.of(context).colorScheme.tertiary.withOpacity(.1),
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(.1),
               )
             ],
           ),
@@ -89,16 +91,16 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
               child: GNav(
-                rippleColor: Theme.of(context).colorScheme.onTertiary,
+                rippleColor: Theme.of(context).colorScheme.tertiary,
                 hoverColor: Theme.of(context).colorScheme.background,
                 gap: 8,
-                activeColor: Theme.of(context).colorScheme.tertiary,
+                activeColor: Theme.of(context).colorScheme.onSurface,
                 iconSize: 24,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 duration: const Duration(milliseconds: 400),
                 tabBackgroundColor: Theme.of(context).colorScheme.background,
-                color: Theme.of(context).colorScheme.tertiary,
+                color: Theme.of(context).colorScheme.onSurface,
                 tabs: const [
                   GButton(
                     icon: Icons.home,

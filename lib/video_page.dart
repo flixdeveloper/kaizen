@@ -1,6 +1,6 @@
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:video_player/video_player.dart';
 
@@ -25,12 +25,15 @@ class _ChewiePlayerState extends State<ChewiePlayer> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     src = widget.url;
     initializePlayer();
   }
 
   @override
   void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     videoPlayer.dispose();
     chewieController?.dispose();
     super.dispose();
