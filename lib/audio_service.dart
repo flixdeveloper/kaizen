@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 class AudioManager {
   final String url;
@@ -24,7 +25,22 @@ class AudioManager {
 
   void _init() async {
     _audioPlayer = AudioPlayer();
-    await _audioPlayer.setUrl(url);
+    //await _audioPlayer.setUrl(url);
+
+    var source = AudioSource.uri(
+      Uri.parse(url),
+      tag: MediaItem(
+        // Specify a unique ID for each media item:
+        id: '1',
+        // Metadata to display in the notification:
+        album: "Album name",
+        title: "Song name",
+        artUri: Uri.parse(
+            'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg'),
+      ),
+    );
+
+    _audioPlayer.setAudioSource(source);
 
     _audioPlayer.playerStateStream.listen((playerState) {
       final isPlaying = playerState.playing;

@@ -2,6 +2,7 @@
 import 'package:firebase_core/firebase_core.dart';
 //import 'package:flutter/foundation.dart'; //
 import 'package:flutter/material.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:kaizen/firebase_options.dart';
 import 'package:kaizen/habit.dart';
 import 'package:kaizen/notification_service.dart';
@@ -18,9 +19,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
   tz.initializeTimeZones();
-
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  //if (Firebase.apps.isEmpty) {
+  //  await Firebase.initializeApp(
+  //      options: DefaultFirebaseOptions.currentPlatform);
+  //}
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.kaizen.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
   runApp(const MyApp());
   //runApp(
   //  DevicePreview(

@@ -50,6 +50,24 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "audio_service",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/audio_service-0.18.12",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "audio_service_platform_interface",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/audio_service_platform_interface-0.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "audio_service_web",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/audio_service_web-0.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "audio_session",
       "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/audio_session-0.1.17",
       "packageUri": "lib/",
@@ -496,6 +514,12 @@
     {
       "name": "just_audio",
       "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/just_audio-0.9.36",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "just_audio_background",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/just_audio_background-0.0.1-beta.11",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -1070,7 +1094,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2023-11-16T17:13:42.721673Z",
+  "generated": "2023-11-17T10:32:30.909959Z",
   "generator": "pub",
   "generatorVersion": "3.1.5"
 }

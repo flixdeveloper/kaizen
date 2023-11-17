@@ -15,13 +15,6 @@ Future<CollectionReference<Map<String, dynamic>>?> userFirePath() async {
   return userRef;
 }
 
-Future<void> initFirebase() async {
-  //Using Offline Persistence in Firestore in a Flutter App for ios and android?
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //FirebaseFirestore.instance.settings =
-  //  Settings(persistenceEnabled: true);
-}
-
 void saveHabit(List<Habit> habits) async {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) return;
