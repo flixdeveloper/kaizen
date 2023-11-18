@@ -21,6 +21,7 @@ class _HomeScreen extends State<HomeScreen>
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxScrolled) => [
         SliverAppBar(
+          foregroundColor: Colors.white,
           expandedHeight: 135,
           toolbarHeight: 110,
           title: Align(

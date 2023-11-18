@@ -178,7 +178,7 @@ class _InMeditationScreen extends State<InMeditationScreen>
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
-                            padding: const EdgeInsets.only(bottom: 30),
+                            padding: const EdgeInsets.only(bottom: 80),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[

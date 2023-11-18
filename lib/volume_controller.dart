@@ -127,39 +127,34 @@ class _PlayerBarState extends State<VolumeBar> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(
-      key: volumeButtonKey,
-      builder: (BuildContext context, setState) {
-        return IconButton(
-          color: widget.isWhite
-              ? Colors.white
-              : Theme.of(context).colorScheme.onSurface,
-          onPressed: () {
-            if (_showVolumeBox) {
-              hideVolumeBox();
-            } else {
-              showVolumeBox();
-            }
-          },
-
-          /// icon depends on the current volume
-          /// if volume is 0, the icon is volume_off
-          /// if volume is between 0 and 0.5, the icon is volume_down
-          /// if volume is between 0.5 and 1, the icon is volume_up
-          icon: StreamBuilder<double>(
-            stream: widget.player.volumeStream, //streams.volume,
-            builder: (context, snapshot) {
-              return Icon(
-                widget.player.volume == 0
-                    ? Icons.volume_off
-                    : widget.player.volume < 0.5
-                        ? Icons.volume_down
-                        : Icons.volume_up,
-              );
-            },
-          ),
-        );
+    return IconButton(
+      color: widget.isWhite
+          ? Colors.white
+          : Theme.of(context).colorScheme.onSurface,
+      onPressed: () {
+        if (_showVolumeBox) {
+          hideVolumeBox();
+        } else {
+          showVolumeBox();
+        }
       },
+
+      /// icon depends on the current volume
+      /// if volume is 0, the icon is volume_off
+      /// if volume is between 0 and 0.5, the icon is volume_down
+      /// if volume is between 0.5 and 1, the icon is volume_up
+      icon: StreamBuilder<double>(
+        stream: widget.player.volumeStream, //streams.volume,
+        builder: (context, snapshot) {
+          return Icon(
+            widget.player.volume == 0
+                ? Icons.volume_off
+                : widget.player.volume < 0.5
+                    ? Icons.volume_down
+                    : Icons.volume_up,
+          );
+        },
+      ),
     );
   }
 }

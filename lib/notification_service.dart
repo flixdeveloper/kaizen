@@ -72,17 +72,17 @@ class NotificationService {
     return path;
   }
 
-  Future showNotification(
-      {int? id,
-      String? title,
-      String? body,
-      String? payLoad,
-      required int icon}) async {
-    id ??= UniqueKey().hashCode;
-    return notificationsPlugin.show(
-        id, title, body, await notificationDetails(icon),
-        payload: payLoad);
-  }
+  //Future showNotification(
+  //    {int? id,
+  //    String? title,
+  //    String? body,
+  //    String? payLoad,
+  //    required int icon}) async {
+  //  id ??= UniqueKey().hashCode;
+  //  return notificationsPlugin.show(
+  //      id, title, body, await notificationDetails(icon),
+  //      payload: payLoad);
+  //}
 
   Future<void> scheduleNotification(
       {required String title,
@@ -97,7 +97,7 @@ class NotificationService {
           reminder.id,
           title,
           body,
-          nextInstanceOfTime(reminder.time, index + 1),
+          nextInstanceOfTime(reminder.time, index),
           await notificationDetails(icon),
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           uiLocalNotificationDateInterpretation:
@@ -106,12 +106,20 @@ class NotificationService {
     }
   }
 
-  tz.TZDateTime nextInstanceOfTime(DateTime time, int day) {
+  tz.TZDateTime _nextInstanceOfHour(DateTime time) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, now.year, now.month,
-        now.day + (day - now.weekday), time.hour, time.minute);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+        tz.local, now.year, now.month, now.day, time.hour, time.minute);
     if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 7));
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  tz.TZDateTime nextInstanceOfTime(DateTime time, int day) {
+    tz.TZDateTime scheduledDate = _nextInstanceOfHour(time);
+    while (scheduledDate.weekday % 7 != day) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
   }

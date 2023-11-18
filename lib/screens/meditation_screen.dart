@@ -30,9 +30,10 @@ class _MeditationScreen extends State<MeditationScreen>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(50, 80, 50, 40),
-          child: Text(
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+              50, MediaQuery.of(context).viewPadding.top + 30, 50, 40),
+          child: const Text(
             "Meditation",
             style: TextStyle(
               fontSize: 35,
