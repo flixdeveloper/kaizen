@@ -85,7 +85,7 @@ class _PlayerBarState extends State<VolumeBar> with TickerProviderStateMixin {
                   child: Opacity(
                     opacity: _animation.value,
                     child: Material(
-                      color: Theme.of(context).cardColor,
+                      color: Theme.of(context).colorScheme.background,
                       elevation: 10,
                       borderRadius: BorderRadius.circular(100),
                       child: Column(

@@ -63,6 +63,7 @@ class _NotesScreen extends State<NotesScreen>
                             child: const Text(
                               "What's on your mind?",
                               style: TextStyle(
+                                color: const Color.fromARGB(255, 250, 250, 250),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
                               ),
@@ -71,13 +72,14 @@ class _NotesScreen extends State<NotesScreen>
                           const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
+                            children: [
                               CircleAvatar(
                                 radius: MediaQuery.of(context).size.width / 5 -
                                     45.5,
                                 backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                    Theme.of(context).colorScheme.tertiary,
                                 child: IconButton(
+                                  padding: EdgeInsets.all(15),
                                   icon: Image.asset('assets/images/sun.png'),
                                   iconSize:
                                       MediaQuery.of(context).size.width / 5 -
@@ -98,8 +100,9 @@ class _NotesScreen extends State<NotesScreen>
                                 radius: MediaQuery.of(context).size.width / 5 -
                                     45.5,
                                 backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                    Theme.of(context).colorScheme.tertiary,
                                 child: IconButton(
+                                  padding: EdgeInsets.all(15),
                                   icon: Image.asset('assets/images/moon.png'),
                                   iconSize:
                                       MediaQuery.of(context).size.width / 5 -
@@ -120,8 +123,9 @@ class _NotesScreen extends State<NotesScreen>
                                 radius: MediaQuery.of(context).size.width / 5 -
                                     45.5,
                                 backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                    Theme.of(context).colorScheme.tertiary,
                                 child: IconButton(
+                                  padding: EdgeInsets.all(15),
                                   icon: Image.asset('assets/images/week.png'),
                                   iconSize:
                                       MediaQuery.of(context).size.width / 5 -
@@ -142,8 +146,9 @@ class _NotesScreen extends State<NotesScreen>
                                 radius: MediaQuery.of(context).size.width / 5 -
                                     45.5,
                                 backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                    Theme.of(context).colorScheme.tertiary,
                                 child: IconButton(
+                                  padding: EdgeInsets.all(15),
                                   icon: Image.asset('assets/images/month.png'),
                                   iconSize:
                                       MediaQuery.of(context).size.width / 5 -

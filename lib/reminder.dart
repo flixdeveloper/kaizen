@@ -85,7 +85,7 @@ Widget reminderPick(
               //selectedFillColor: Colors.red,
               firstDayOfWeek:
                   MaterialLocalizations.of(context).firstDayOfWeekIndex,
-              fillColor: Theme.of(context).colorScheme.primaryContainer,
+              //fillColor: Theme.of(context).colorScheme.primaryContainer,
               onChanged: (int day) {
                 setState(() {
                   // Use module % 7 as Sunday's index in the array is 0 and
@@ -128,8 +128,11 @@ Widget reminderPick(
                         Navigator.pop(context);
                         refreshParent();
                       },
-                      child: const Text(
+                      child: Text(
                         "Delete",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                       ),
                     ),
                   )),
@@ -159,8 +162,11 @@ Widget reminderPick(
                         Navigator.pop(context);
                         refreshParent();
                       },
-                      child: const Text(
+                      child: Text(
                         "Confirm",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                       ),
                     ),
                   ),

@@ -17,7 +17,7 @@ class _Rounded extends State<Rounded> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            color: widget.color ?? Theme.of(context).colorScheme.background,
+            color: widget.color ?? Theme.of(context).colorScheme.tertiary,
             borderRadius: BorderRadius.all(Radius.circular(widget.round))),
         child: Material(
           color: Colors.transparent,

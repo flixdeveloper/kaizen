@@ -172,9 +172,9 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                         MaterialLocalizations.of(context)
                                             .firstDayOfWeekIndex,
                                     //selectedFillColor: Colors.red,
-                                    fillColor: Theme.of(context)
-                                        .colorScheme
-                                        .primaryContainer,
+                                    //fillColor: Theme.of(context)
+                                    //    .colorScheme
+                                    //    .primaryContainer,
                                     onChanged: (int day) {
                                       setState(() {
                                         // Use module % 7 as Sunday's index in the array is 0 and
@@ -235,12 +235,6 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                           const Text('Remind me'),
                                           const Spacer(),
                                           Switch.adaptive(
-                                            activeColor: Platform.isAndroid
-                                                ? Colors.white
-                                                : CupertinoColors.activeGreen,
-                                            //inactiveThumbColor: Platform.isAndroid
-                                            //    ? Colors.white
-                                            //    : Colors.blue,
                                             value: allowReminder,
                                             onChanged: (change) => {
                                               //if (change)
@@ -293,7 +287,11 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                                                     "h:mm a")
                                                                 .format(reminder
                                                                     .time),
-                                                        //change the string in Text "22:00", instead put the list definded as reminders, widgets amount as reminders amont ofc?
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .background),
                                                       ),
                                                     ),
                                                   ElevatedButton(
@@ -316,8 +314,13 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                                           () =>
                                                               setState(() {}));
                                                     },
-                                                    child: const Text(
+                                                    child: Text(
                                                       "+",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .background),
                                                     ),
                                                   )
                                                 ]),
@@ -376,6 +379,7 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                     ? "Save habit"
                                     : "Add habit",
                                 style: const TextStyle(
+                                  color: Color.fromARGB(255, 250, 250, 250),
                                   fontSize: 18,
                                 ),
                               ),

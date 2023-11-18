@@ -1,9 +1,16 @@
+import 'dart:typed_data';
+
+import 'package:audio_service/audio_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file/src/interface/file.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
+import 'package:kaizen/audio_player_handler.dart';
+import 'package:kaizen/home_widget.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class AudioManager {
-  final String url;
+  final HomeWidget widget;
   late AudioPlayer _audioPlayer;
 
   AudioPlayer getAudioPlayer() {
@@ -19,28 +26,35 @@ class AudioManager {
   );
   final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
 
-  AudioManager(this.url) {
+  AudioManager(this.widget) {
     _init();
+  }
+
+  Future<Uri> findUri(String imageUrl) async {
+    final cache = DefaultCacheManager(); // Gives a Singleton instance
+    final file = await cache.getSingleFile(imageUrl);
+    return file.uri;
   }
 
   void _init() async {
     _audioPlayer = AudioPlayer();
-    //await _audioPlayer.setUrl(url);
+    await _audioPlayer.setUrl(widget.details);
 
-    var source = AudioSource.uri(
-      Uri.parse(url),
-      tag: MediaItem(
-        // Specify a unique ID for each media item:
-        id: '1',
-        // Metadata to display in the notification:
-        album: "Album name",
-        title: "Song name",
-        artUri: Uri.parse(
-            'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg'),
-      ),
+    final mediaItem = await MediaItem(
+      id: '1',
+      album: (widget.subTitle == null) ? widget.subTitle : widget.title,
+      title: (widget.subTitle == null) ? widget.title : widget.subTitle!,
+      artUri: await findUri(widget.background),
     );
 
-    _audioPlayer.setAudioSource(source);
+    //await AudioService.init(
+    //  builder: () => AudioPlayerHandler(), //_audioPlayer, mediaItem),
+    //  config: const AudioServiceConfig(
+    //    androidNotificationChannelId: 'com.kaizen.channel.audio',
+    //    androidNotificationChannelName: 'Audio playback',
+    //    androidNotificationOngoing: true,
+    //  ),
+    //);
 
     _audioPlayer.playerStateStream.listen((playerState) {
       final isPlaying = playerState.playing;
@@ -113,15 +127,15 @@ class AudioManager {
   }
 }
 
-class ProgressBarState {
-  ProgressBarState({
-    required this.current,
-    required this.buffered,
-    required this.total,
-  });
-  final Duration current;
-  final Duration buffered;
-  final Duration total;
-}
-
-enum ButtonState { paused, playing, loading }
+//class ProgressBarState {
+//  ProgressBarState({
+//    required this.current,
+//    required this.buffered,
+//    required this.total,
+//  });
+//  final Duration current;
+//  final Duration buffered;
+//  final Duration total;
+//}
+//
+//enum ButtonState { paused, playing, loading }

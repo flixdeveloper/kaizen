@@ -1,5 +1,7 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kaizen/audio_player_handler.dart';
 import 'package:kaizen/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:kaizen/home_widget.dart';
@@ -20,19 +22,18 @@ class AudioPlayer extends StatefulWidget {
 }
 
 class _AudioPlayerState extends State<AudioPlayer> {
-  late final AudioManager _audioManager;
   late final VolumeBar volumeBar;
 
   @override
   void initState() {
     super.initState();
-    _audioManager = AudioManager(widget.widget.details);
-    volumeBar = VolumeBar(player: _audioManager.getAudioPlayer());
+    getAudioManager().start(widget.widget);
+    volumeBar = VolumeBar(player: getAudioManager().getAudioPlayer());
   }
 
   @override
   void dispose() {
-    _audioManager.dispose();
+    getAudioManager().stop();
     volumeBar.clear();
     super.dispose();
   }
@@ -75,20 +76,20 @@ class _AudioPlayerState extends State<AudioPlayer> {
             ),
             const SizedBox(height: 15),
             ValueListenableBuilder<ProgressBarState>(
-              valueListenable: _audioManager.progressNotifier,
+              valueListenable: getAudioManager().progressNotifier,
               builder: (_, value, __) {
                 return ProgressBar(
                   progress: value.current,
                   buffered: value.buffered,
                   total: value.total,
-                  onSeek: _audioManager.seek,
+                  onSeek: getAudioManager().seek,
                 );
               },
             ),
             const SizedBox(height: 5),
             buildRow()
             //ValueListenableBuilder<ButtonState>(
-            //  valueListenable: _audioManager.buttonNotifier,
+            //  valueListenable: getAudioManager().buttonNotifier,
             //  builder: (_, value, __) {
             //    switch (value) {
             //      case ButtonState.loading:
@@ -102,13 +103,13 @@ class _AudioPlayerState extends State<AudioPlayer> {
             //        return IconButton(
             //          icon: const Icon(Icons.play_arrow),
             //          iconSize: 32.0,
-            //          onPressed: _audioManager.play,
+            //          onPressed: getAudioManager().play,
             //        );
             //      case ButtonState.playing:
             //        return IconButton(
             //          icon: const Icon(Icons.pause),
             //          iconSize: 32.0,
-            //          onPressed: _audioManager.pause,
+            //          onPressed: getAudioManager().pause,
             //        );
             //    }
             //  },
@@ -134,9 +135,9 @@ class _AudioPlayerState extends State<AudioPlayer> {
         //      divisions: 10,
         //      min: 0.0,
         //      max: 1.0,
-        //      value: _audioManager.getAudioPlayer().volume,
-        //      stream: _audioManager.getAudioPlayer().volumeStream,
-        //      onChanged: _audioManager.getAudioPlayer().setVolume,
+        //      value: getAudioManager().getAudioPlayer().volume,
+        //      stream: getAudioManager().getAudioPlayer().volumeStream,
+        //      onChanged: getAudioManager().getAudioPlayer().setVolume,
         //    );
         //  },
         //),
@@ -146,7 +147,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
           icon: const Icon(Icons.replay_10),
           iconSize: 25.0,
           onPressed: () {
-            _audioManager.replay();
+            getAudioManager().rewind();
           },
         ),
 
@@ -155,7 +156,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
         /// loading/buffering/ready state. Depending on the state we show the
         /// appropriate button or loading indicator.
         ValueListenableBuilder<ButtonState>(
-          valueListenable: _audioManager.buttonNotifier,
+          valueListenable: getAudioManager().buttonNotifier,
           builder: (_, value, __) {
             switch (value) {
               case ButtonState.loading:
@@ -169,13 +170,13 @@ class _AudioPlayerState extends State<AudioPlayer> {
                 return IconButton(
                   icon: const Icon(Icons.play_arrow),
                   iconSize: 50.0,
-                  onPressed: _audioManager.play,
+                  onPressed: getAudioManager().play,
                 );
               case ButtonState.playing:
                 return IconButton(
                   icon: const Icon(Icons.pause),
                   iconSize: 50.0,
-                  onPressed: _audioManager.pause,
+                  onPressed: getAudioManager().pause,
                 );
             }
           },
@@ -184,12 +185,12 @@ class _AudioPlayerState extends State<AudioPlayer> {
           icon: const Icon(Icons.forward_10),
           iconSize: 25.0,
           onPressed: () {
-            _audioManager.forward();
+            getAudioManager().fastForward();
           },
         ),
         // Opens speed slider dialog
         StreamBuilder<double>(
-          stream: _audioManager.getAudioPlayer().speedStream,
+          stream: getAudioManager().getAudioPlayer().speedStream,
           builder: (context, snapshot) => IconButton(
             icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
                 maxLines: 1,
@@ -202,9 +203,9 @@ class _AudioPlayerState extends State<AudioPlayer> {
                 divisions: 3,
                 min: 0.5,
                 max: 2,
-                value: _audioManager.getAudioPlayer().speed,
-                stream: _audioManager.getAudioPlayer().speedStream,
-                onChanged: _audioManager.getAudioPlayer().setSpeed,
+                value: getAudioManager().getAudioPlayer().speed,
+                stream: getAudioManager().getAudioPlayer().speedStream,
+                onChanged: getAudioManager().getAudioPlayer().setSpeed,
               );
             },
           ),

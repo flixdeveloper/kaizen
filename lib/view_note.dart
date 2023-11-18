@@ -12,6 +12,7 @@ Widget buildNewNote(
     //refresh the states of Parent from ModalBottomSheet in flutter
     return Scaffold(
         floatingActionButton: FloatingActionButton(
+          shape: const CircleBorder(),
           backgroundColor: Colors.blueGrey,
           onPressed: () => {
             Note(title, questions, answearsForSave(size)).save(),
@@ -98,6 +99,7 @@ Widget buildUpdateNote(BuildContext context, Note note) {
     //refresh the states of Parent from ModalBottomSheet in flutter
     return Scaffold(
         floatingActionButton: FloatingActionButton(
+          shape: const CircleBorder(),
           backgroundColor: Colors.blueGrey,
           onPressed: () => {
             Note(title, questions, answearsForSave(size)).save(update: note),

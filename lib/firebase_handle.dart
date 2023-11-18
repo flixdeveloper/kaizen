@@ -15,7 +15,15 @@ Future<CollectionReference<Map<String, dynamic>>?> userFirePath() async {
   return userRef;
 }
 
-void saveHabit(List<Habit> habits) async {
+Future<void> initFirebase() async {
+  try {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+  } catch (_) {}
+  return;
+}
+
+void saveHabit(List<Habit> habits) {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) return;
   FirebaseFirestore.instance
@@ -24,7 +32,7 @@ void saveHabit(List<Habit> habits) async {
       .set({'habits': habits.map((e) => e.toJson()).toList()});
 }
 
-void saveNote(List<Note> notes) async {
+void saveNote(List<Note> notes) {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) return;
   FirebaseFirestore.instance
@@ -33,7 +41,7 @@ void saveNote(List<Note> notes) async {
       .set({'notes': notes.map((e) => e.toJson()).toList()});
 }
 
-void saveMeditation() async {
+void saveMeditation() {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) return;
   FirebaseFirestore.instance.collection("meditation").doc(user.uid).set({
@@ -47,7 +55,7 @@ void saveMeditation() async {
 
 void initMeditation() async {
   User? user = FirebaseAuth.instance.currentUser;
-  if (user == null) return null;
+  if (user == null) return;
   var meditationData = await FirebaseFirestore.instance
       .collection("meditation")
       .doc(user.uid)

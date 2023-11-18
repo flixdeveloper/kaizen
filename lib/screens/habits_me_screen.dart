@@ -33,6 +33,7 @@ class _HabitsMeScreen extends State<HabitsMeScreen>
     }
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
         backgroundColor: Colors.blueGrey,
         onPressed: () => {
           //addHabbitSheet(context),

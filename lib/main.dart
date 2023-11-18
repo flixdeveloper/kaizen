@@ -1,9 +1,12 @@
 //import 'package:device_preview/device_preview.dart'; //
-import 'package:firebase_core/firebase_core.dart';
 //import 'package:flutter/foundation.dart'; //
+//import 'package:audio_service/audio_service.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:just_audio_background/just_audio_background.dart';
-import 'package:kaizen/firebase_options.dart';
+import 'package:kaizen/audio_player_handler.dart';
+//import 'package:kaizen/audio_player_handler.dart';
+//import 'package:just_audio_background/just_audio_background.dart';
+import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/habit.dart';
 import 'package:kaizen/notification_service.dart';
 import 'package:kaizen/screens/habits_me_screen.dart';
@@ -19,15 +22,24 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
   tz.initializeTimeZones();
-  //if (Firebase.apps.isEmpty) {
-  //  await Firebase.initializeApp(
-  //      options: DefaultFirebaseOptions.currentPlatform);
-  //}
-  await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.kaizen.channel.audio',
-    androidNotificationChannelName: 'Audio playback',
-    androidNotificationOngoing: true,
+  await initFirebase();
+  final service = await AudioService.init(
+    builder: () => AudioPlayerHandler(),
+    config: const AudioServiceConfig(
+      androidNotificationChannelId: 'com.kaizen.channel.audio',
+      androidNotificationChannelName: 'Audio playback',
+      androidNotificationOngoing: true,
+      androidStopForegroundOnPause: true,
+    ),
   );
+  setAudioManager(service);
+
+  //await JustAudioBackground.init(
+  //  androidNotificationChannelId: 'com.kaizen.channel.audio',
+  //  androidNotificationChannelName: 'Audio playback',
+  //  androidNotificationOngoing: true,
+  //);
+
   runApp(const MyApp());
   //runApp(
   //  DevicePreview(

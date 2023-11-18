@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:just_audio/just_audio.dart';
+import 'package:kaizen/audio_player_handler.dart';
 import 'package:kaizen/screens/meditation_screen.dart';
 import 'package:kaizen/volume_controller.dart';
 import 'package:pausable_timer/pausable_timer.dart';
