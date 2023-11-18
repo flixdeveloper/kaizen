@@ -21,7 +21,6 @@ class _LoginScreen extends State<LoginScreen>
 
   Future<String?> _authUser(LoginData data) async {
     return Future.delayed(loginTime).then((_) {
-      // TODO: Add sign up logic here
       return signIn(data);
     });
   }
@@ -47,7 +46,6 @@ class _LoginScreen extends State<LoginScreen>
 
   Future<String?> _signupUser(SignupData data) async {
     return Future.delayed(loginTime).then((_) {
-      // TODO: Add sign up logic here
       return signUp(data);
     });
   }

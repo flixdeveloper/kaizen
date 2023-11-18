@@ -5,7 +5,6 @@ void iconPickSheet(BuildContext context, Function refreshParent) {
   showModalBottomSheet(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    //TODO: change builder
     context: context,
     builder: (context) {
       return FractionallySizedBox(

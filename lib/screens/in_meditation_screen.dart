@@ -12,8 +12,6 @@ import 'package:pausable_timer/pausable_timer.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
-import '../audio_service.dart';
-
 class InMeditationScreen extends StatefulWidget {
   var timerControlller = CountdownController(autoStart: true);
   bool isBellPaused = false;
@@ -112,18 +110,19 @@ class _InMeditationScreen extends State<InMeditationScreen>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
       //forbidden swipe in iOS(my ThemeData(platform: TargetPlatform.iOS,)
-      onWillPop: () async => (Platform.isIOS) ? false : true,
+      canPop: Platform.isAndroid,
       child: GestureDetector(
           onTap: () => {
                 if (!(widget.isBellPaused || widget.isSoundPaused))
                   setState(() {
                     finishedAnimation = false;
                     visible = !visible;
-                    if (visible)
+                    if (visible) {
                       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
                           overlays: SystemUiOverlay.values);
+                    }
                   })
               },
           child: Scaffold(

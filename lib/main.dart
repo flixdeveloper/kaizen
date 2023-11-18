@@ -5,7 +5,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:kaizen/audio_player_handler.dart';
 //import 'package:kaizen/audio_player_handler.dart';
-//import 'package:just_audio_background/just_audio_background.dart';
 import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/habit.dart';
 import 'package:kaizen/notification_service.dart';

@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:cart_stepper/cart_stepper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -157,7 +154,6 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                     const Text('Frequency'),
                                     const Spacer(),
                                     buildDropdownFreq(() => setState(() {})),
-                                    //TODO: reminder
                                   ],
                                 ),
                                 15,

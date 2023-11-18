@@ -142,10 +142,11 @@ class AudioPlayerHandler extends BaseAudioHandler {
 
   @override
   Future<void> stop() {
-    if (_player.playerState.processingState != ProcessingState.loading)
+    if (_player.playerState.processingState != ProcessingState.loading) {
       return _player.stop();
-    else
+    } else {
       return _player.pause();
+    }
     //await _player.stop();
     //return super.stop();
   }

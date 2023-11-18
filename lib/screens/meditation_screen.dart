@@ -88,7 +88,6 @@ class _MeditationScreen extends State<MeditationScreen>
                       const Text('Starting bell'),
                       const Spacer(),
                       buildDropdownBellStart(() => setState(() {})),
-                      //TODO: reminder
                     ],
                   ),
                   15,
@@ -101,7 +100,6 @@ class _MeditationScreen extends State<MeditationScreen>
                       const Text('Ending bell'),
                       const Spacer(),
                       buildDropdownBellEnd(() => setState(() {})),
-                      //TODO: reminder
                     ],
                   ),
                   15,
