@@ -4,10 +4,14 @@ import 'package:kaizen/home_widget.dart';
 
 class ArticleView extends StatefulWidget {
   final HomeWidget homeWidget;
-  const ArticleView(this.homeWidget, {super.key});
+  const ArticleView(
+    this.homeWidget,
+  ) : super(key: null);
 
   @override
-  State<ArticleView> createState() => _ArticleView();
+  State<StatefulWidget> createState() {
+    return _ArticleView();
+  }
 }
 
 class _ArticleView extends State<ArticleView>
@@ -16,7 +20,7 @@ class _ArticleView extends State<ArticleView>
   Widget build(BuildContext context) {
     String title = widget.homeWidget.title;
     String details = widget.homeWidget.details.replaceAll(r'\n', '\n');
-    String background = widget.homeWidget.background;
+    String backgroundUrl = widget.homeWidget.background;
 
     return Scaffold(
         appBar: AppBar(),
@@ -29,7 +33,7 @@ class _ArticleView extends State<ArticleView>
                   aspectRatio: 15 / 9,
                   child: Positioned.fill(
                     child: CachedNetworkImage(
-                      imageUrl: background,
+                      imageUrl: backgroundUrl,
                       fit: BoxFit.cover,
                     ),
                   )),
