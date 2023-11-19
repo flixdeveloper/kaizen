@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:kaizen/home_widget.dart';
 
 class ArticleView extends StatefulWidget {
-  final HomeWidget homeWidget;
-  const ArticleView(
-    this.homeWidget,
-  ) : super(key: null);
+  final String title;
+  final String details;
+  final String backgroundUrl;
+  const ArticleView(this.title, this.details, this.backgroundUrl)
+      : super(key: null);
 
   @override
   State<StatefulWidget> createState() {
@@ -18,10 +18,6 @@ class _ArticleView extends State<ArticleView>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    String title = widget.homeWidget.title;
-    String details = widget.homeWidget.details.replaceAll(r'\n', '\n');
-    String backgroundUrl = widget.homeWidget.background;
-
     return Scaffold(
         appBar: AppBar(),
         body: SingleChildScrollView(
@@ -33,15 +29,15 @@ class _ArticleView extends State<ArticleView>
                   aspectRatio: 15 / 9,
                   child: Positioned.fill(
                     child: CachedNetworkImage(
-                      imageUrl: backgroundUrl,
+                      imageUrl: widget.backgroundUrl,
                       fit: BoxFit.cover,
                     ),
                   )),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: Column(
                   children: [
-                    Text(title,
+                    Text(widget.title,
                         style: const TextStyle(
                           fontSize: 32,
                           fontFamily: 'Lato',
@@ -49,7 +45,7 @@ class _ArticleView extends State<ArticleView>
                         )),
                     const SizedBox(height: 15),
                     Text(
-                      details,
+                      widget.details.replaceAll(r'\n', '\n'),
                       style: const TextStyle(
                         fontSize: 21,
                       ),
@@ -57,6 +53,7 @@ class _ArticleView extends State<ArticleView>
                   ],
                 ),
               ),
+              const SizedBox(height: 50)
             ],
           ),
         ));

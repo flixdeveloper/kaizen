@@ -23,18 +23,18 @@ class HomeWidget {
   void homeWidgetClick(BuildContext context) {
     if (type == "link") {
       launchUrl(context);
-    } else if (type == "article")
+    } else if (type == "article") {
       navigateArticle(context);
-    else if (type == "video")
+    } else if (type == "video") {
       navigateVideo(context);
-    else if (type == "audio") navigateAudio(context);
+    } else if (type == "audio") navigateAudio(context);
   }
 
   void navigateArticle(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (contetxt) => ArticleView(this),
+        builder: (contetxt) => ArticleView(title, details, background),
       ),
     );
   }
