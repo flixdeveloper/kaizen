@@ -111,7 +111,6 @@ class _HabitsMeScreen extends State<HabitsMeScreen>
 
   Widget GroupHabits(List<Habit> habitsByType) {
     return ListView.separated(
-      reverse: true,
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(20, 5, 20, 40),

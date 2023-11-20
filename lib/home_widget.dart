@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:kaizen/article_page.dart';
 import 'package:kaizen/audio_page.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 import 'package:kaizen/video_page.dart';
 import 'package:kaizen/web_view_page.dart';
 
@@ -25,7 +24,7 @@ class HomeWidget {
       launchUrl(context);
     } else if (type == "article") {
       navigateArticle(context);
-    } else if (type == "video") {
+    } else if (type == "video" || type == "youtube") {
       navigateVideo(context);
     } else if (type == "audio") navigateAudio(context);
   }
@@ -43,7 +42,7 @@ class HomeWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (contetxt) => ChewiePlayer(details),
+        builder: (contetxt) => VideoPage(type == "video", details),
       ),
     );
   }
@@ -85,10 +84,7 @@ class HomeWidget {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .shadow
-                                    .withOpacity(0.5),
+                                color: Colors.black.withOpacity(0.5),
                                 spreadRadius: 1,
                                 blurRadius: 4,
                                 offset: const Offset(
@@ -105,18 +101,12 @@ class HomeWidget {
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .shadow
-                                            .withOpacity(0.18),
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .shadow
-                                            .withOpacity(0.68)
+                                        Colors.black.withOpacity(0.11),
+                                        Colors.black.withOpacity(0.75)
                                       ],
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,
-                                      stops: const [0.55, 0.95],
+                                      stops: const [0.57, 0.95],
                                     ),
                                     //color: Theme.of(context)
                                     //    .colorScheme
@@ -136,6 +126,7 @@ class HomeWidget {
                                     children: [
                                       Text(title,
                                           style: const TextStyle(
+                                            color: Colors.white,
                                             fontSize: 20,
                                             fontFamily: 'Lato',
                                             fontWeight: FontWeight.bold,
@@ -146,6 +137,7 @@ class HomeWidget {
                                         child: Text(
                                           subTitle ?? "",
                                           style: const TextStyle(
+                                            color: Colors.white,
                                             fontSize: 14,
                                           ),
                                         ),

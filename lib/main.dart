@@ -3,6 +3,7 @@
 //import 'package:audio_service/audio_service.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kaizen/audio_player_handler.dart';
 //import 'package:kaizen/audio_player_handler.dart';
 import 'package:kaizen/firebase_handle.dart';
@@ -22,6 +23,9 @@ void main() async {
   NotificationService().initNotification();
   tz.initializeTimeZones();
   await initFirebase();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   final service = await AudioService.init(
     builder: () => AudioPlayerHandler(),
     config: const AudioServiceConfig(

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaizen/habit.dart';
@@ -33,14 +32,18 @@ class NotificationService {
   }
 
   notificationDetails(int icon) async {
+    final iconPath = await getImagePath(icon.toString());
     return NotificationDetails(
         android: AndroidNotificationDetails('habits', 'habits remind',
-            largeIcon: DrawableResourceAndroidBitmap('habit_icon_$icon'),
+            largeIcon: (iconPath != null)
+                ? FilePathAndroidBitmap(
+                    iconPath) //DrawableResourceAndroidBitmap
+                : null,
             importance: Importance.max),
-        iOS: DarwinNotificationDetails(attachments: [
-          DarwinNotificationAttachment(
-              await getImageFromAssets(icon.toString()))
-        ]));
+        iOS: DarwinNotificationDetails(
+            attachments: (iconPath != null)
+                ? [DarwinNotificationAttachment(iconPath)]
+                : null));
   }
 
   void cancelSchedule(Habit habit) {
@@ -53,57 +56,51 @@ class NotificationService {
     if (habit.allowReminder) {
       for (var reminder in habit.reminders) {
         scheduleNotification(
-            title: habit.title, body: '', reminder: reminder, icon: habit.icon);
+            title: habit.title, reminder: reminder, icon: habit.icon);
       }
     }
   }
 
-  Future<String> getImageFromAssets(String icon) async {
+  Future<String?> getImagePath(String icon) async {
     final dir = await getApplicationDocumentsDirectory();
-    final path = "${dir.path}/icon_$icon";
+    final path = "${dir.path}/icon_$icon.png";
     final file = File(path);
     if (await file.exists()) {
       return path;
+    }
+    return null;
+  }
+
+  Future<void> setImageInAssets(String icon) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final path = "${dir.path}/icon_$icon.png";
+    final file = File(path);
+    if (await file.exists()) {
+      return;
     }
     final imageBytes =
         await rootBundle.load('assets/icons/habit_icon ($icon).png');
     final bytes = imageBytes.buffer.asUint8List();
     await file.writeAsBytes(bytes);
-    return path;
+    return;
   }
-
-  //Future showNotification(
-  //    {int? id,
-  //    String? title,
-  //    String? body,
-  //    String? payLoad,
-  //    required int icon}) async {
-  //  id ??= UniqueKey().hashCode;
-  //  return notificationsPlugin.show(
-  //      id, title, body, await notificationDetails(icon),
-  //      payload: payLoad);
-  //}
 
   Future<void> scheduleNotification(
       {required String title,
-      required String body,
+      String? body,
       required Reminder reminder,
       required int icon}) async {
-    for (int index = 0; index < reminder.days.length; index++) {
-      if (!reminder.days[index]) {
-        continue;
-      }
-      await notificationsPlugin.zonedSchedule(
-          reminder.id,
-          title,
-          body,
-          nextInstanceOfTime(reminder.time, index),
-          await notificationDetails(icon),
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
-    }
+    setImageInAssets(icon.toString());
+    await notificationsPlugin.zonedSchedule(
+        reminder.id,
+        title,
+        body,
+        nextInstanceOfTime(reminder.time, reminder.days),
+        await notificationDetails(icon),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
   }
 
   tz.TZDateTime _nextInstanceOfHour(DateTime time) {
@@ -116,11 +113,24 @@ class NotificationService {
     return scheduledDate;
   }
 
-  tz.TZDateTime nextInstanceOfTime(DateTime time, int day) {
+  tz.TZDateTime nextInstanceOfTime(DateTime time, List<bool> days) {
     tz.TZDateTime scheduledDate = _nextInstanceOfHour(time);
-    while (scheduledDate.weekday % 7 != day) {
+    while (!days[scheduledDate.weekday % 7]) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
   }
 }
+
+
+  //Future showNotification(
+  //    {int? id,
+  //    String? title,
+  //    String? body,
+  //    String? payLoad,
+  //    required int icon}) async {
+  //  id ??= UniqueKey().hashCode;
+  //  return notificationsPlugin.show(
+  //      id, title, body, await notificationDetails(icon),
+  //      payload: payLoad);
+  //}

@@ -198,7 +198,7 @@ class _AudioPlayerState extends State<AudioPlayer> {
               showSliderDialog(
                 context: context,
                 title: "Adjust speed",
-                divisions: 3,
+                divisions: 6,
                 min: 0.5,
                 max: 2,
                 value: getAudioManager().getAudioPlayer().speed,
@@ -234,7 +234,7 @@ void showSliderDialog({
           height: 100.0,
           child: Column(
             children: [
-              Text('${snapshot.data?.toStringAsFixed(1)}$valueSuffix',
+              Text('${snapshot.data?.toStringAsFixed(1)}$valueSuffix' 'x',
                   style: const TextStyle(
                       fontFamily: 'Fixed',
                       fontWeight: FontWeight.bold,

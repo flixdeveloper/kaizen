@@ -22,19 +22,26 @@ class Habit {
 
   void resetHabit(BuildContext context) {
     DateTime now = DateTime.now();
+    final newReset = nextReset(context);
     if (now.isAfter(resetAt)) {
       did = 0;
-      setNextReset(context);
+      resetAt = newReset;
+    } else if (newReset.isBefore(resetAt)) {
+      resetAt = newReset;
     }
   }
 
   void setNextReset(BuildContext context) {
+    resetAt = nextReset(context);
+  }
+
+  DateTime nextReset(BuildContext context) {
     DateTime d = DateTime.now();
     DateTime now = DateTime(d.year, d.month, d.day);
     switch (frequency) {
       case "Daily":
         {
-          resetAt = now.add(const Duration(days: 1));
+          return now.add(const Duration(days: 1));
         }
       case "Weekly":
         {
@@ -45,11 +52,11 @@ class Habit {
           if (diff < 0) diff += 7;
 
           DateTime firstDayOfNextweek = now.add(Duration(days: 7 - diff));
-          resetAt = firstDayOfNextweek;
+          return firstDayOfNextweek;
         }
       default:
         {
-          resetAt = DateTime(now.year, now.month + 1, 0);
+          return DateTime(now.year, now.month + 1, 0);
         }
     }
   }

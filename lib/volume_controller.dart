@@ -52,8 +52,7 @@ class _PlayerBarState extends State<VolumeBar> with TickerProviderStateMixin {
     volumeBoxOverlayEntry?.remove();
     var viewPortSize = MediaQuery.of(context).size;
 
-    RenderBox box =
-        volumeButtonKey.currentContext!.findRenderObject() as RenderBox;
+    RenderBox box = context.findRenderObject() as RenderBox;
     Offset position = box.localToGlobal(Offset.zero);
     volumeBoxOverlayEntry = OverlayEntry(
       builder: (context) => AnimatedBuilder(

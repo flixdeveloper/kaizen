@@ -83,7 +83,7 @@ Future<List<Habit>> getHabits() async {
   for (var habit in habits) {
     list.add(habit);
   }
-  return list;
+  return list.reversed.toList();
   //{'habits': habits.map((e) => e.toJson()).toList()}
 
   //saveHabit(list); ????????????????????????????????????????????????????????
@@ -107,7 +107,7 @@ Future<List<Note>> getNotes() async {
   for (var note in notes) {
     list.add(note);
   }
-  return list;
+  return list.reversed.toList();
 }
 
 Future<List<HomeWidget>> getHomeWidgets() async {
@@ -120,5 +120,5 @@ Future<List<HomeWidget>> getHomeWidgets() async {
   for (var widget in HomeWidgetsJson.docs) {
     list.add(HomeWidget.fromJson(widget.data()));
   }
-  return list;
+  return list.reversed.toList();
 }

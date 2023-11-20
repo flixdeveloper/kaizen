@@ -26,13 +26,12 @@ class _ArticleView extends State<ArticleView>
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AspectRatio(
-                  aspectRatio: 15 / 9,
-                  child: Positioned.fill(
-                    child: CachedNetworkImage(
-                      imageUrl: widget.backgroundUrl,
-                      fit: BoxFit.cover,
-                    ),
-                  )),
+                aspectRatio: 15 / 9,
+                child: CachedNetworkImage(
+                  imageUrl: widget.backgroundUrl,
+                  fit: BoxFit.cover,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: Column(

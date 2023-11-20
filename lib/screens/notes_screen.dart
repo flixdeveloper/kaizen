@@ -167,7 +167,6 @@ class _NotesScreen extends State<NotesScreen>
                             ],
                           ),
                           ListView.builder(
-                            reverse: true,
                             padding: const EdgeInsets.only(top: 15, bottom: 30),
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),

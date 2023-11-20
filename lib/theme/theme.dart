@@ -7,7 +7,6 @@ ThemeData lightMode = ThemeData(
       primary: Colors.grey.shade600,
       secondary: Colors.grey.shade400,
       tertiary: Colors.grey.shade300,
-      shadow: Colors.grey.shade100,
       primaryContainer: Colors.white.withAlpha(210),
     ));
 
@@ -18,6 +17,5 @@ ThemeData darkMode = ThemeData(
       primary: Colors.grey.shade500,
       secondary: Colors.grey.shade700,
       tertiary: const Color.fromARGB(255, 26, 26, 26),
-      shadow: Colors.black,
       primaryContainer: Colors.white.withAlpha(10),
     ));
