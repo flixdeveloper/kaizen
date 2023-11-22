@@ -19,7 +19,8 @@ class _VideoPageState extends State<VideoPage> {
   late final PodPlayerController controller;
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    super.initState();
+    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     controller = PodPlayerController(
       playVideoFrom: (widget.isMp4)
           ? PlayVideoFrom.network(widget.url)
@@ -29,11 +30,20 @@ class _VideoPageState extends State<VideoPage> {
         autoPlay: true,
       ),
     )..initialise();
-    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
   }
 
   @override
   void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     controller.dispose();
@@ -45,25 +55,38 @@ class _VideoPageState extends State<VideoPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: PodVideoPlayer(
-          controller: controller,
-          podPlayerLabels: const PodPlayerLabels(
-            play: "PLAY",
-            pause: "PAUSE",
-            error: "ERROR WHILE TRYING TO PLAY VIDEO",
-            exitFullScreen: "EXIT FULL SCREEN",
-            fullscreen: "FULL SCREEN",
-            loopVideo: "LOOP VIDEO",
-            mute: "MUTE",
-            playbackSpeed: "PLAYBACK SPEED",
-            settings: "SETTINGS",
-            unmute: "UNMUTE",
-            optionEnabled: "YES",
-            optionDisabled: "NO",
-            quality: "QUALITY",
+        child: Directionality(
+          textDirection: TextDirection.ltr,
+          child: PodVideoPlayer(
+            controller: controller,
+            podPlayerLabels: const PodPlayerLabels(
+              play: "PLAY",
+              pause: "PAUSE",
+              error: "ERROR WHILE TRYING TO PLAY VIDEO",
+              exitFullScreen: "EXIT FULL SCREEN",
+              fullscreen: "FULL SCREEN",
+              loopVideo: "LOOP VIDEO",
+              mute: "MUTE",
+              playbackSpeed: "PLAYBACK SPEED",
+              settings: "SETTINGS",
+              unmute: "UNMUTE",
+              optionEnabled: "YES",
+              optionDisabled: "NO",
+              quality: "QUALITY",
+            ),
+            onToggleFullScreen: fullScreenToggle,
           ),
         ),
       ),
     );
+  }
+
+  Future<void> fullScreenToggle(bool isFullScreen) async {
+    if (!isFullScreen) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+          overlays: SystemUiOverlay.values);
+    } else {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    }
   }
 }
