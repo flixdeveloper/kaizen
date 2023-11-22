@@ -19,15 +19,17 @@ class Note {
     date = DateFormat('EEEE, MMM d').format(currentDate); //Thursday, Sep 28
   }
 
-  void save({Note? update}) {
-    var contains = false;
-    for (var i = question.length - 1; i >= 0; i--) {
+  String firstAnswear() {
+    for (var i = 0; i < question.length; i++) {
       if (answear[i] != "") {
-        contains = true;
-        break;
+        return answear[i];
       }
     }
-    if (!contains) return;
+    return "";
+  }
+
+  void save({Note? update}) {
+    if (firstAnswear() == "") return;
     if (update == null) {
       notes.add(this);
     } else {
@@ -69,7 +71,7 @@ class Note {
           const SizedBox(height: 20),
           Align(
             alignment: Alignment.topLeft,
-            child: Text(answear[0]),
+            child: Text(firstAnswear()),
           )
         ]),
         20,

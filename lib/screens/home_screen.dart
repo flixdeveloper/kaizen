@@ -18,70 +18,85 @@ class _HomeScreen extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return NestedScrollView(
-      headerSliverBuilder: (context, innerBoxScrolled) => [
-        SliverAppBar(
-          foregroundColor: Colors.white,
-          expandedHeight: 135,
-          toolbarHeight: 110,
-          title: Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(children: [
-                Text(
-                  "Good ${timeDay()}!",
-                  style: const TextStyle(
-                    fontSize: 35,
-                    fontFamily: 'PTSans',
-                    fontWeight: FontWeight.w600,
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+    return Stack(
+      clipBehavior: Clip.none,
+      fit: StackFit.expand,
+      children: [
+        Positioned.fill(
+            child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxScrolled) => [
+            SliverAppBar(
+              foregroundColor: Colors.white,
+              expandedHeight: 135,
+              toolbarHeight: 110,
+              title: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(children: [
+                    Text(
+                      "Good ${timeDay()}!",
+                      style: const TextStyle(
+                        fontSize: 35,
+                        fontFamily: 'PTSans',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'KaiZen',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'kaushanScript',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    //const SizedBox(height: 1),
+                  ])),
+              flexibleSpace: const ClipRRect(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(150),
                   ),
+                  child: Image(
+                    image: AssetImage('assets/images/app_bar_background.jpg'),
+                    fit: BoxFit.cover,
+                  )),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(150),
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  'KaiZen',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontFamily: 'kaushanScript',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                //const SizedBox(height: 1),
-              ])),
-          flexibleSpace: const ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(150),
               ),
-              child: Image(
-                image: AssetImage('assets/images/app_bar_background.jpg'),
-                fit: BoxFit.cover,
-              )),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(150),
             ),
-          ),
-        ),
+          ],
+          body: RefreshIndicator(
+              onRefresh: () async {
+                final widgets = await getHomeWidgets();
+                setState(() {
+                  homeWidgets = widgets;
+                });
+              },
+              child: ListView.builder(
+                padding: const EdgeInsets.only(top: 55, bottom: 30),
+                itemBuilder: (BuildContext context, int index) {
+                  return homeWidgets[index].getWidget(context);
+                },
+                itemCount: homeWidgets.length,
+              )),
+        )),
+        if (!isDarkMode)
+          Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                  color: Colors.white.withOpacity(0.1),
+                  height: MediaQuery.of(context).viewPadding.top))
       ],
-      body: RefreshIndicator(
-          onRefresh: () async {
-            final widgets = await getHomeWidgets();
-            setState(() {
-              homeWidgets = widgets;
-            });
-          },
-          child: ListView.builder(
-            padding: const EdgeInsets.only(top: 55, bottom: 30),
-            itemBuilder: (BuildContext context, int index) {
-              return homeWidgets[index].getWidget(context);
-            },
-            itemCount: homeWidgets.length,
-          )),
     );
   }
 }
 
 String timeDay() {
   var hour = DateTime.now().hour;
-  if (hour < 12) {
+  if (hour > 5 && hour < 12) {
     return 'Morning';
   }
   if (hour < 17) {

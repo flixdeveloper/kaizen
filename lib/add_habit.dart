@@ -202,6 +202,10 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                     //buildDropdownGoal(() => setState(() {})),
 
                                     CartStepperInt(
+                                      style: CartStepperStyle.fromColorScheme(
+                                          Theme.of(context).colorScheme,
+                                          iconPlus: Icons.add,
+                                          iconMinus: Icons.remove),
                                       value: goal,
                                       size: 24,
                                       didChangeCount: (count) {

@@ -66,6 +66,7 @@ class MyApp extends StatelessWidget {
       theme: lightMode,
       darkTheme: darkMode,
       home: const SplashScreen(),
+      navigatorKey: NotificationService.navigatorKey, // set property
     );
   }
 }

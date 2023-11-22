@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaizen/habit.dart';
@@ -8,26 +10,46 @@ import 'package:path_provider/path_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   final FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   Future<void> initNotification() async {
+    notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
     // Initialize native android notification
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // Initialize native Ios Notifications
-    const DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings();
+    DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+            onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
+    InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
 
     await notificationsPlugin.initialize(
       initializationSettings,
+    );
+  }
+
+  void onDidReceiveLocalNotification(
+      int id, String? title, String? body, String? payload) async {
+    // display a dialog with the notification details, tap ok to go to another page
+    final context = NotificationService.navigatorKey.currentContext;
+    if (context == null) return;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: (title != null) ? Text(title) : null,
+        content: (body != null) ? Text(body) : null,
+      ),
     );
   }
 
@@ -68,7 +90,11 @@ class NotificationService {
     if (await file.exists()) {
       return path;
     }
-    return null;
+    final imageBytes =
+        await rootBundle.load('assets/icons/habit_icon ($icon).png');
+    final bytes = imageBytes.buffer.asUint8List();
+    await file.writeAsBytes(bytes);
+    return path;
   }
 
   Future<void> setImageInAssets(String icon) async {
@@ -103,7 +129,7 @@ class NotificationService {
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
   }
 
-  tz.TZDateTime _nextInstanceOfHour(DateTime time) {
+  tz.TZDateTime _nextInstanceOfHour(tz.TZDateTime time) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate = tz.TZDateTime(
         tz.local, now.year, now.month, now.day, time.hour, time.minute);
@@ -114,7 +140,8 @@ class NotificationService {
   }
 
   tz.TZDateTime nextInstanceOfTime(DateTime time, List<bool> days) {
-    tz.TZDateTime scheduledDate = _nextInstanceOfHour(time);
+    tz.TZDateTime scheduledDate =
+        _nextInstanceOfHour(tz.TZDateTime.from(time, tz.local));
     while (!days[scheduledDate.weekday % 7]) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }

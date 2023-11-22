@@ -137,8 +137,8 @@ class AudioPlayerHandler extends BaseAudioHandler {
   @override
   Future<void> pause() => _player.pause();
 
-  //@override
-  //Future<void> seek(Duration position) => _player.seek(position);
+  @override
+  Future<void> seek(Duration position) => _player.seek(position);
 
   @override
   Future<void> stop() {
@@ -168,6 +168,11 @@ class AudioPlayerHandler extends BaseAudioHandler {
   /// it can be broadcast to audio_service clients.
   PlaybackState _transformEvent(PlaybackEvent event) {
     return PlaybackState(
+      systemActions: const {
+        MediaAction.seek,
+        MediaAction.seekForward,
+        MediaAction.seekBackward,
+      },
       controls: [
         MediaControl.rewind,
         if (_player.playing) MediaControl.pause else MediaControl.play,

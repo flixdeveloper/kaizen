@@ -21,7 +21,6 @@ class VolumeBar extends StatefulWidget {
 class _PlayerBarState extends State<VolumeBar> with TickerProviderStateMixin {
   bool _showVolumeBox = false;
   OverlayEntry? volumeBoxOverlayEntry;
-  GlobalKey volumeButtonKey = GlobalKey();
   // Animation controller for Overlays
   // it responsible for showing/hiding the Overlays with one animation
   late AnimationController _animationController;

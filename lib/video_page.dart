@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,7 @@ class _VideoPageState extends State<VideoPage> {
   late final PodPlayerController controller;
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     controller = PodPlayerController(
       playVideoFrom: (widget.isMp4)
           ? PlayVideoFrom.network(widget.url)
@@ -32,6 +34,8 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     controller.dispose();
     super.dispose();
   }
