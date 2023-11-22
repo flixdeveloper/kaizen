@@ -31,7 +31,7 @@ class Note {
   void save({Note? update}) {
     if (firstAnswear() == "") return;
     if (update == null) {
-      notes.add(this);
+      notes.insert(0, this);
     } else {
       update.answear = answear;
     }

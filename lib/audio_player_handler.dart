@@ -26,7 +26,7 @@ Future<AudioHandler> initAudioService() async {
   );
 }
 
-class AudioPlayerHandler extends BaseAudioHandler {
+class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 //with SeekHandler {
   late MediaItem _item;
   final AudioPlayer _player = AudioPlayer();
@@ -61,13 +61,6 @@ class AudioPlayerHandler extends BaseAudioHandler {
   Future<void> start(HomeWidget homeWidget) async {
     HomeWidget widget = homeWidget;
 
-    _item = MediaItem(
-      id: '1',
-      album: (widget.subTitle == null) ? widget.subTitle : widget.title,
-      title: (widget.subTitle == null) ? widget.title : widget.subTitle!,
-      artUri: await findUri(widget.background),
-    );
-
     var source = AudioSource.uri(
       Uri.parse(widget.details),
       tag: mediaItem,
@@ -75,12 +68,20 @@ class AudioPlayerHandler extends BaseAudioHandler {
 
     _player.setAudioSource(source);
 
+    await _player.play();
+
+    _item = MediaItem(
+      id: '1',
+      album: (widget.subTitle == null) ? widget.subTitle : widget.title,
+      title: (widget.subTitle == null) ? widget.title : widget.subTitle!,
+      duration: _player.duration,
+      artUri: await findUri(widget.background),
+    );
+
     // So that our clients (the Flutter UI and the system notification) know
     // what state to display, here we set up our audio handler to broadcast all
     // playback state changes as they happen via playbackState...
     mediaItem.add(_item);
-
-    play();
 
     _player.playerStateStream.listen((playerState) {
       final isPlaying = playerState.playing;
@@ -151,15 +152,15 @@ class AudioPlayerHandler extends BaseAudioHandler {
     //return super.stop();
   }
 
-  @override
-  Future<void> fastForward() {
-    return _player.seek(Duration(seconds: _player.position.inSeconds + 10));
-  }
-
-  @override
-  Future<void> rewind() {
-    return _player.seek(Duration(seconds: _player.position.inSeconds - 10));
-  }
+  //@override
+  //Future<void> fastForward() {
+  //  return _player.seek(Duration(seconds: _player.position.inSeconds + 10));
+  //}
+//
+  //@override
+  //Future<void> rewind() {
+  //  return _player.seek(Duration(seconds: _player.position.inSeconds - 10));
+  //}
 
   /// Transform a just_audio event into an audio_service state.
   ///
@@ -168,17 +169,17 @@ class AudioPlayerHandler extends BaseAudioHandler {
   /// it can be broadcast to audio_service clients.
   PlaybackState _transformEvent(PlaybackEvent event) {
     return PlaybackState(
-      systemActions: const {
-        MediaAction.seek,
-        MediaAction.seekForward,
-        MediaAction.seekBackward,
-      },
       controls: [
         MediaControl.rewind,
         if (_player.playing) MediaControl.pause else MediaControl.play,
         MediaControl.stop,
         MediaControl.fastForward,
       ],
+      systemActions: const {
+        MediaAction.seek,
+        MediaAction.seekForward,
+        MediaAction.seekBackward,
+      },
       androidCompactActionIndices: const [0, 1, 3],
       processingState: const {
         ProcessingState.idle: AudioProcessingState.idle,

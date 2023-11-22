@@ -80,6 +80,8 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                           children: [
                             Rounded(
                                 TextField(
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   decoration: InputDecoration(
                                     labelText: 'Title',
                                     enabledBorder: UnderlineInputBorder(
@@ -142,6 +144,7 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                               onToggle: (index) {
                                 setState(() {
                                   isBuild = index == 0;
+                                  if (isBuild && goal == 0) goal = 1;
                                 });
                               },
                             ),
@@ -210,7 +213,8 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                       size: 24,
                                       didChangeCount: (count) {
                                         setState(() {
-                                          if (count > 0 && count < 100) {
+                                          if ((count > 0 && count < 100) ||
+                                              (!isBuild && count == 0)) {
                                             goal = count;
                                           }
                                         });
@@ -341,8 +345,10 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                 ),
                               ),
                               onPressed: () {
-                                var notificationService = NotificationService();
                                 String title = titleController.text;
+                                if (title.isEmpty) return;
+
+                                var notificationService = NotificationService();
                                 var oldHabit = widget.habit;
                                 if (oldHabit != null) {
                                   notificationService.cancelSchedule(oldHabit);
@@ -368,7 +374,7 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                       allowReminder,
                                       reminders);
                                   habit.setNextReset(context);
-                                  habits.add(habit);
+                                  habits.insert(0, habit);
                                   notificationService.setNotifications(habit);
                                 }
                                 saveHabit(habits);

@@ -63,6 +63,7 @@ Widget buildNewNote(
                         ),
                         Rounded(
                             TextField(
+                              textCapitalization: TextCapitalization.sentences,
                               decoration: null,
                               keyboardType: TextInputType.multiline,
                               minLines: minLines(size),
@@ -151,6 +152,7 @@ Widget buildUpdateNote(BuildContext context, Note note) {
                         ),
                         Rounded(
                             TextField(
+                              textCapitalization: TextCapitalization.sentences,
                               decoration: null,
                               keyboardType: TextInputType.multiline,
                               minLines: minLines(size),

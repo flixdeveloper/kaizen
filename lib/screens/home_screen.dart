@@ -87,7 +87,16 @@ class _HomeScreen extends State<HomeScreen>
           Align(
               alignment: Alignment.topCenter,
               child: Container(
-                  color: Colors.white.withOpacity(0.1),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                    colors: [
+                      Colors.white.withOpacity(0.2),
+                      Colors.white.withOpacity(0.04)
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: const [0.7, 0.95],
+                  )),
                   height: MediaQuery.of(context).viewPadding.top))
       ],
     );
