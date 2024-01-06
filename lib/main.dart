@@ -25,7 +25,6 @@ void main() async {
   await initFirebase();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
   ]);
   final service = await AudioService.init(
     builder: () => AudioPlayerHandler(),
