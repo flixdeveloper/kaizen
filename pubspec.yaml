@@ -34,20 +34,20 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   toggle_switch: ^2.1.0
-  cart_stepper: ^4.1.2
+  cart_stepper: ^4.3.0
   weekday_selector: ^1.1.0
-  flutter_login: ^4.2.1
-  firebase_core: ^2.17.0
-  firebase_auth: ^4.10.1
-  cloud_firestore: ^4.13.1
+  flutter_login: ^5.0.0
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.14.0
   json_annotation: ^4.8.1
-  intl: ^0.18.1
-  flutter_local_notifications: ^16.1.0
+  intl: ^0.19.0
+  flutter_local_notifications: ^16.3.0
   timezone: ^0.9.2
-  cached_network_image: ^3.3.0
-  webview_flutter: ^4.4.1
-  video_player: ^2.7.2
-  just_audio: ^0.9.35
+  cached_network_image: ^3.3.1
+  webview_flutter: ^4.4.3
+  #video_player: ^2.8.2
+  just_audio: ^0.9.36
   audio_video_progress_bar: ^2.0.1
   carousel_slider: ^4.2.1
   timer_count_down: ^2.2.2
@@ -68,7 +68,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  device_preview: ^1.1.0
+  #device_preview: ^1.1.0
   flutter_native_splash: ^2.3.2
   flutter_lints: ^3.0.1
   dependency_validator: ^3.2.3
