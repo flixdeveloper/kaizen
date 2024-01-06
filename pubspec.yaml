@@ -58,7 +58,7 @@ dependencies:
   audio_service: ^0.18.12
   flutter_cache_manager: ^3.3.1
   pod_player: ^0.2.1
-  rename: ^3.0.1
+  #rename: ^3.0.1
 
 dev_dependencies:
   flutter_test:
