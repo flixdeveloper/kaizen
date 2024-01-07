@@ -704,14 +704,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.2"
-  libphonenumber_plugin:
-    dependency: transitive
-    description:
-      name: libphonenumber_plugin
-      sha256: c615021d9816fbda2b2587881019ed595ecdf54d999652d7e4cce0e1f026368c
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.3"
   libphonenumber_web:
     dependency: transitive
     description:
