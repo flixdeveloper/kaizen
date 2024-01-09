@@ -20,7 +20,8 @@ class _HomeScreen extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = AdaptiveTheme.of(context).mode.isDark;
+    bool isDarkMode = AdaptiveTheme.of(context).brightness == Brightness.dark;
+    ;
 
     return Scaffold(
         floatingActionButton: FloatingActionButton(

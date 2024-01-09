@@ -45,12 +45,11 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreen extends State<SettingsScreen>
     with SingleTickerProviderStateMixin {
-  var tmpIs24 = '12h';
+  var tmpIs24 = SettingsScreen.is24 ? '24h' : '12h';
   var tmpFirstDay = SettingsScreen.firstDay.substring(0);
   var tmpDarkMode = SettingsScreen.darkMode.substring(0);
   @override
   Widget build(BuildContext context) {
-    if (SettingsScreen.is24) tmpIs24 = '24h';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),

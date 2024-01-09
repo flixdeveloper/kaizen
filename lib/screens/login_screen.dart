@@ -26,6 +26,25 @@ class _LoginScreen extends State<LoginScreen>
     });
   }
 
+  Future<String?> signInAnonymously() async {
+    try {
+      await FirebaseAuth.instance.signInAnonymously();
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+    }
+    await initSettings(context);
+    SettingsScreen.initDarkMode(context);
+    initMeditation();
+    habits = await getHabits();
+    notes = await getNotes();
+    homeWidgets = await getHomeWidgets();
+    for (var habit in habits) {
+      NotificationService().setNotifications(habit);
+    }
+
+    return null;
+  }
+
   Future<String?> signIn(LoginData loginData) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -59,7 +78,16 @@ class _LoginScreen extends State<LoginScreen>
     } on FirebaseAuthException catch (e) {
       return e.code;
     }
+    await initSettings(context);
+    SettingsScreen.initDarkMode(context);
+    initMeditation();
+    habits = await getHabits();
+    notes = await getNotes();
     homeWidgets = await getHomeWidgets();
+    for (var habit in habits) {
+      NotificationService().setNotifications(habit);
+    }
+
     return null;
   }
 
@@ -90,6 +118,15 @@ class _LoginScreen extends State<LoginScreen>
       },
       onRecoverPassword: _recoverPassword,
       hideForgotPasswordButton: true,
+      loginProviders: [
+        LoginProvider(
+          icon: Icons.visibility_off,
+          label: 'Anonymously',
+          callback: () async {
+            return await signInAnonymously();
+          },
+        ),
+      ],
     );
   }
 }
