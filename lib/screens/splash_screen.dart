@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> replaceScreen() async {
-    var nextScreen = await getNext();
+    var nextScreen = await getNext(context);
     try {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -165,9 +165,10 @@ class _SplashScreenState extends State<SplashScreen>
   }
 }
 
-Future<Widget> getNext() async {
+Future<Widget> getNext(BuildContext context) async {
   try {
     if (FirebaseAuth.instance.currentUser != null) {
+      initSettings(context);
       initMeditation();
       habits = await getHabits();
       notes = await getNotes();

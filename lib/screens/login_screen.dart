@@ -7,6 +7,7 @@ import 'package:kaizen/notification_service.dart';
 import 'package:kaizen/screens/habits_me_screen.dart';
 import 'package:kaizen/screens/home_screen.dart';
 import 'package:kaizen/screens/notes_screen.dart';
+import 'package:kaizen/settings_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,7 +33,8 @@ class _LoginScreen extends State<LoginScreen>
     } on FirebaseAuthException catch (e) {
       return e.code;
     }
-
+    await initSettings(context);
+    SettingsScreen.initDarkMode(context);
     initMeditation();
     habits = await getHabits();
     notes = await getNotes();
@@ -57,6 +59,7 @@ class _LoginScreen extends State<LoginScreen>
     } on FirebaseAuthException catch (e) {
       return e.code;
     }
+    homeWidgets = await getHomeWidgets();
     return null;
   }
 
@@ -76,9 +79,14 @@ class _LoginScreen extends State<LoginScreen>
       onLogin: _authUser,
       onSignup: _signupUser,
       onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (_) => const MyHomePage(),
-        ));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MyHomePage()),
+          (Route<dynamic> route) => false,
+        );
+        //Navigator.of(context).pushReplacement(MaterialPageRoute(
+        //  builder: (_) => const MyHomePage(),
+        //));
       },
       onRecoverPassword: _recoverPassword,
       hideForgotPasswordButton: true,

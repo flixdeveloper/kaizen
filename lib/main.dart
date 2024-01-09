@@ -1,6 +1,7 @@
 //import 'package:device_preview/device_preview.dart'; //
 //import 'package:flutter/foundation.dart'; //
 //import 'package:audio_service/audio_service.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +44,8 @@ void main() async {
   //  androidNotificationOngoing: true,
   //);
 
-  runApp(const MyApp());
+  final savedThemeMode = await AdaptiveTheme.getThemeMode();
+  runApp(MyApp(savedThemeMode: savedThemeMode));
   //runApp(
   //  DevicePreview(
   //    enabled: !kReleaseMode,
@@ -53,21 +55,34 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AdaptiveThemeMode? savedThemeMode;
+  const MyApp({super.key, this.savedThemeMode});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      //useInheritedMediaQuery: true, //
-      //locale: DevicePreview.locale(context), //
-      //builder: DevicePreview.appBuilder, //
-      title: 'kaizen',
-      theme: lightMode,
-      darkTheme: darkMode,
-      home: const SplashScreen(),
-      navigatorKey: NotificationService.navigatorKey, // set property
+    return AdaptiveTheme(
+      light: lightMode,
+      dark: darkMode,
+      initial: savedThemeMode ?? AdaptiveThemeMode.system,
+      builder: (theme, darkTheme) => MaterialApp(
+        title: 'kaizen',
+        theme: theme,
+        darkTheme: darkTheme,
+        home: const SplashScreen(),
+        navigatorKey: NotificationService.navigatorKey, // set property
+      ),
     );
+    //return MaterialApp(
+    //  //useInheritedMediaQuery: true, //
+    //  //locale: DevicePreview.locale(context), //
+    //  //builder: DevicePreview.appBuilder, //
+    //  title: 'kaizen',
+    //  theme: lightMode,
+    //  darkTheme: darkMode,
+    //  home: const SplashScreen(),
+    //  navigatorKey: NotificationService.navigatorKey, // set property
+    //);
   }
 }
 

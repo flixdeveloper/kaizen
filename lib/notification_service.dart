@@ -70,7 +70,11 @@ class NotificationService {
 
   void cancelSchedule(Habit habit) {
     for (Reminder reminder in habit.reminders) {
-      notificationsPlugin.cancel(reminder.id);
+      for (int day in [0, 1, 2, 3, 4, 5, 6]) {
+        if (reminder.days[day]) {
+          notificationsPlugin.cancel(reminder.id + day);
+        }
+      }
     }
   }
 
@@ -117,16 +121,20 @@ class NotificationService {
       required Reminder reminder,
       required int icon}) async {
     setImageInAssets(icon.toString());
-    await notificationsPlugin.zonedSchedule(
-        reminder.id,
-        title,
-        body,
-        nextInstanceOfTime(reminder.time, reminder.days),
-        await notificationDetails(icon),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
+    for (int day in [0, 1, 2, 3, 4, 5, 6]) {
+      if (reminder.days[day]) {
+        await notificationsPlugin.zonedSchedule(
+            reminder.id + day,
+            title,
+            body,
+            nextInstanceOfTime(reminder.time, day),
+            await notificationDetails(icon),
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+            matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
+      }
+    }
   }
 
   tz.TZDateTime _nextInstanceOfHour(tz.TZDateTime time) {
@@ -139,25 +147,12 @@ class NotificationService {
     return scheduledDate;
   }
 
-  tz.TZDateTime nextInstanceOfTime(DateTime time, List<bool> days) {
+  tz.TZDateTime nextInstanceOfTime(DateTime time, int day) {
     tz.TZDateTime scheduledDate =
         _nextInstanceOfHour(tz.TZDateTime.from(time, tz.local));
-    while (!days[scheduledDate.weekday % 7]) {
+    while (scheduledDate.weekday % 7 != day) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
   }
 }
-
-
-  //Future showNotification(
-  //    {int? id,
-  //    String? title,
-  //    String? body,
-  //    String? payLoad,
-  //    required int icon}) async {
-  //  id ??= UniqueKey().hashCode;
-  //  return notificationsPlugin.show(
-  //      id, title, body, await notificationDetails(icon),
-  //      payload: payLoad);
-  //}

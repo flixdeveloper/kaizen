@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaizen/reminder.dart';
+import 'package:kaizen/settings_screen.dart';
 
 part 'habit.g.dart';
 
@@ -45,8 +46,7 @@ class Habit {
         }
       case "Weekly":
         {
-          var firstDayTZ =
-              MaterialLocalizations.of(context).firstDayOfWeekIndex;
+          var firstDayTZ = SettingsScreen.firstDayIndex();
           var nowWeekDay = now.weekday % 7;
           int diff = nowWeekDay - firstDayTZ;
           if (diff < 0) diff += 7;

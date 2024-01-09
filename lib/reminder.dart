@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaizen/add_habit.dart';
+import 'package:kaizen/settings_screen.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
 part 'reminder.g.dart';
@@ -73,7 +74,7 @@ Widget reminderPick(
               child: CupertinoDatePicker(
                 initialDateTime: time,
                 mode: CupertinoDatePickerMode.time,
-                use24hFormat: MediaQuery.of(context).alwaysUse24HourFormat,
+                use24hFormat: SettingsScreen.is24,
                 // This is called when the user changes the time.
                 onDateTimeChanged: (DateTime newTime) {
                   time = newTime;
@@ -83,8 +84,7 @@ Widget reminderPick(
             ),
             WeekdaySelector(
               //selectedFillColor: Colors.red,
-              firstDayOfWeek:
-                  MaterialLocalizations.of(context).firstDayOfWeekIndex,
+              firstDayOfWeek: SettingsScreen.firstDayIndex(),
               //fillColor: Theme.of(context).colorScheme.primaryContainer,
               onChanged: (int day) {
                 setState(() {

@@ -8,7 +8,7 @@ import 'package:just_audio/just_audio.dart';
 
 // ignore: must_be_immutable
 class VolumeBar extends StatefulWidget {
-  late Function clear;
+  Function clear = () {};
   final AudioPlayer player;
   final bool isWhite;
   // ignore: prefer_const_constructors_in_immutables

@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:kaizen/settings_screen.dart';
 import 'package:kaizen/firebase_options.dart';
 import 'package:kaizen/habit.dart';
 import 'package:kaizen/home_widget.dart';
@@ -21,6 +25,48 @@ Future<void> initFirebase() async {
         options: DefaultFirebaseOptions.currentPlatform);
   } catch (_) {}
   return;
+}
+
+Future<void> deleteUserAccount() async {
+  try {
+    await FirebaseAuth.instance.currentUser!.delete();
+  } on FirebaseAuthException catch (e) {
+    if (e.code == "requires-recent-login") {
+      await _reauthenticateAndDelete();
+    } else {
+      // Handle other Firebase exceptions
+    }
+  } catch (e) {
+    // Handle general exception
+  }
+}
+
+Future<void> _reauthenticateAndDelete() async {
+  try {
+    final providerData = FirebaseAuth.instance.currentUser?.providerData.first;
+
+    if (AppleAuthProvider().providerId == providerData!.providerId) {
+      await FirebaseAuth.instance.currentUser!
+          .reauthenticateWithProvider(AppleAuthProvider());
+    } else if (GoogleAuthProvider().providerId == providerData.providerId) {
+      await FirebaseAuth.instance.currentUser!
+          .reauthenticateWithProvider(GoogleAuthProvider());
+    }
+
+    await FirebaseAuth.instance.currentUser?.delete();
+  } catch (e) {
+    // Handle exceptions
+  }
+}
+
+void deleteEveryData() {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) return;
+
+  FirebaseFirestore.instance.collection("habits").doc(user.uid).delete();
+  FirebaseFirestore.instance.collection("notes").doc(user.uid).delete();
+  FirebaseFirestore.instance.collection("meditation").doc(user.uid).delete();
+  FirebaseFirestore.instance.collection("settings").doc(user.uid).delete();
 }
 
 void saveHabit(List<Habit> habits) {
@@ -83,7 +129,7 @@ Future<List<Habit>> getHabits() async {
   for (var habit in habits) {
     list.add(habit);
   }
-  return list.reversed.toList();
+  return list.toList();
   //{'habits': habits.map((e) => e.toJson()).toList()}
 
   //saveHabit(list); ????????????????????????????????????????????????????????
@@ -107,7 +153,49 @@ Future<List<Note>> getNotes() async {
   for (var note in notes) {
     list.add(note);
   }
-  return list.reversed.toList();
+  return list.toList();
+}
+
+void saveSettings(bool is24, String firstDay, String darkMode) {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) return;
+  FirebaseFirestore.instance.collection("settings").doc(user.uid).set({
+    'is24': is24,
+    'firstDay': firstDay,
+    'darkMode': darkMode,
+  });
+}
+
+Future<void> initSettings(BuildContext context) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) return;
+  var settingsData = await FirebaseFirestore.instance
+      .collection("settings")
+      .doc(user.uid)
+      .get();
+  var data = settingsData.data();
+  if (data == null || !data.containsKey("is24")) {
+    SettingsScreen.is24 = MediaQuery.of(context).alwaysUse24HourFormat;
+    SettingsScreen.firstDay =
+        firstDayToString(MaterialLocalizations.of(context).firstDayOfWeekIndex);
+    SettingsScreen.darkMode = 'Default';
+    return;
+  }
+  SettingsScreen.is24 = data["is24"];
+  SettingsScreen.firstDay = data["firstDay"];
+  SettingsScreen.darkMode = data["darkMode"];
+  return;
+}
+
+firstDayToString(int day) {
+  switch (day) {
+    case 6:
+      return "Saturday";
+    case 1:
+      return "Monday";
+    default:
+      return "Sunday";
+  }
 }
 
 Future<List<HomeWidget>> getHomeWidgets() async {

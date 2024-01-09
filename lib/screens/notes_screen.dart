@@ -49,8 +49,8 @@ class _NotesScreen extends State<NotesScreen>
                                   const Color.fromARGB(255, 139, 128, 0),
                               minimumSize: Size(
                                   double.infinity,
-                                  (MediaQuery.of(context).size.width / 5 -
-                                          45.5) *
+                                  ((MediaQuery.of(context).size.width - 115) /
+                                          8) *
                                       2),
                               shape: RoundedRectangleBorder(
                                 borderRadius:
@@ -74,16 +74,17 @@ class _NotesScreen extends State<NotesScreen>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CircleAvatar(
-                                radius: MediaQuery.of(context).size.width / 5 -
-                                    45.5,
+                                radius:
+                                    (MediaQuery.of(context).size.width - 115) /
+                                        8,
                                 backgroundColor:
                                     Theme.of(context).colorScheme.tertiary,
                                 child: IconButton(
                                   padding: const EdgeInsets.all(15),
                                   icon: Image.asset('assets/images/sun.png'),
-                                  iconSize:
-                                      MediaQuery.of(context).size.width / 5 -
-                                          45.5,
+                                  iconSize: (MediaQuery.of(context).size.width -
+                                          115) /
+                                      8,
                                   onPressed: () {
                                     newNoteClick([
                                       "What am I grateful for today?",
@@ -97,16 +98,17 @@ class _NotesScreen extends State<NotesScreen>
                               ),
                               const SizedBox(width: 5),
                               CircleAvatar(
-                                radius: MediaQuery.of(context).size.width / 5 -
-                                    45.5,
+                                radius:
+                                    (MediaQuery.of(context).size.width - 115) /
+                                        8,
                                 backgroundColor:
                                     Theme.of(context).colorScheme.tertiary,
                                 child: IconButton(
                                   padding: const EdgeInsets.all(15),
                                   icon: Image.asset('assets/images/moon.png'),
-                                  iconSize:
-                                      MediaQuery.of(context).size.width / 5 -
-                                          45.5,
+                                  iconSize: (MediaQuery.of(context).size.width -
+                                          115) /
+                                      8,
                                   onPressed: () {
                                     newNoteClick([
                                       "What were my accomplishments and successes today?",
@@ -120,16 +122,17 @@ class _NotesScreen extends State<NotesScreen>
                               ),
                               const SizedBox(width: 5),
                               CircleAvatar(
-                                radius: MediaQuery.of(context).size.width / 5 -
-                                    45.5,
+                                radius:
+                                    (MediaQuery.of(context).size.width - 115) /
+                                        8,
                                 backgroundColor:
                                     Theme.of(context).colorScheme.tertiary,
                                 child: IconButton(
                                   padding: const EdgeInsets.all(15),
                                   icon: Image.asset('assets/images/week.png'),
-                                  iconSize:
-                                      MediaQuery.of(context).size.width / 5 -
-                                          45.5,
+                                  iconSize: (MediaQuery.of(context).size.width -
+                                          115) /
+                                      8,
                                   onPressed: () {
                                     newNoteClick([
                                       "What were my major achievements and progress this week?",
@@ -143,16 +146,17 @@ class _NotesScreen extends State<NotesScreen>
                               ),
                               const SizedBox(width: 5),
                               CircleAvatar(
-                                radius: MediaQuery.of(context).size.width / 5 -
-                                    45.5,
+                                radius:
+                                    (MediaQuery.of(context).size.width - 115) /
+                                        8,
                                 backgroundColor:
                                     Theme.of(context).colorScheme.tertiary,
                                 child: IconButton(
                                   padding: const EdgeInsets.all(15),
                                   icon: Image.asset('assets/images/month.png'),
-                                  iconSize:
-                                      MediaQuery.of(context).size.width / 5 -
-                                          45.5,
+                                  iconSize: (MediaQuery.of(context).size.width -
+                                          115) /
+                                      8,
                                   onPressed: () {
                                     newNoteClick([
                                       "What were my biggest accomplishments and milestones this month?",

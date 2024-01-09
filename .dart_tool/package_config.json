@@ -8,6 +8,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "adaptive_theme",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/adaptive_theme-3.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "another_flushbar",
       "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/another_flushbar-1.12.30",
       "packageUri": "lib/",
@@ -512,6 +518,48 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "shared_preferences",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences-2.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "shared_preferences_android",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_android-2.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "shared_preferences_foundation",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.3.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "shared_preferences_linux",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_linux-2.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "shared_preferences_platform_interface",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_platform_interface-2.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "shared_preferences_web",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_web-2.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "shared_preferences_windows",
+      "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_windows-2.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "sign_in_button",
       "rootUri": "file:///C:/Users/danie/AppData/Local/Pub/Cache/hosted/pub.dev/sign_in_button-3.2.0",
       "packageUri": "lib/",
@@ -788,7 +836,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-01-07T05:54:48.753579Z",
+  "generated": "2024-01-09T10:52:20.444800Z",
   "generator": "pub",
   "generatorVersion": "3.2.3"
 }

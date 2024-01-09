@@ -26,121 +26,125 @@ class _MeditationScreen extends State<MeditationScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-              50, MediaQuery.of(context).viewPadding.top + 30, 50, 40),
-          child: const Text(
-            "Meditation",
-            style: TextStyle(
-              fontSize: 35,
-              fontFamily: 'PTSans',
-              fontWeight: FontWeight.w600,
+        body: SingleChildScrollView(
+            child: Padding(
+      padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(50, 30, 50, 40),
+            child: const Text(
+              "Meditation",
+              style: TextStyle(
+                fontSize: 35,
+                fontFamily: 'PTSans',
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-        ),
-        buildMusic(context),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(45, 20, 45, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              //pickTime
-              GestureDetector(
-                onTap: () => {
-                  pickTime(),
-                  Feedback.forTap(context),
-                },
-                child: Rounded(
+          buildMusic(context),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45, 20, 45, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                //pickTime
+                GestureDetector(
+                  onTap: () => {
+                    pickTime(),
+                    Feedback.forTap(context),
+                  },
+                  child: Rounded(
+                      Row(
+                        //navigate to next screen!!!
+                        //Navigator.push(context, MaterialPageRoute(builder: (contetxt) => IconPickScreen(),),);
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Duration'),
+                          const Spacer(),
+                          Text(printDuration(duration)),
+                          Image.asset('assets/images/next.png', scale: 3),
+                          ///////////////////////////////////////
+                          //CupertinoTimerPicker(
+                          //  mode: CupertinoTimerPickerMode.hm,
+                          //  initialTimerDuration: duration,
+                          //  // This is called when the user changes the timer's
+                          //  // duration.
+                          //  onTimerDurationChanged: (Duration newDuration) {
+                          //    setState(() => duration = newDuration);
+                          //  },
+                          //),
+                          ////////////////////////////////////
+                        ],
+                      ),
+                      15,
+                      10),
+                ),
+                const SizedBox(height: 10),
+                Rounded(
                     Row(
-                      //navigate to next screen!!!
-                      //Navigator.push(context, MaterialPageRoute(builder: (contetxt) => IconPickScreen(),),);
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Duration'),
+                        const Text('Starting bell'),
                         const Spacer(),
-                        Text(printDuration(duration)),
-                        Image.asset('assets/images/next.png', scale: 3),
-                        ///////////////////////////////////////
-                        //CupertinoTimerPicker(
-                        //  mode: CupertinoTimerPickerMode.hm,
-                        //  initialTimerDuration: duration,
-                        //  // This is called when the user changes the timer's
-                        //  // duration.
-                        //  onTimerDurationChanged: (Duration newDuration) {
-                        //    setState(() => duration = newDuration);
-                        //  },
-                        //),
-                        ////////////////////////////////////
+                        buildDropdownBellStart(() => setState(() {})),
                       ],
                     ),
                     15,
                     10),
-              ),
-              const SizedBox(height: 10),
-              Rounded(
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Starting bell'),
-                      const Spacer(),
-                      buildDropdownBellStart(() => setState(() {})),
-                    ],
-                  ),
-                  15,
-                  10),
-              const SizedBox(height: 10),
-              Rounded(
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Ending bell'),
-                      const Spacer(),
-                      buildDropdownBellEnd(() => setState(() {})),
-                    ],
-                  ),
-                  15,
-                  10),
-            ],
+                const SizedBox(height: 10),
+                Rounded(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Ending bell'),
+                        const Spacer(),
+                        buildDropdownBellEnd(() => setState(() {})),
+                      ],
+                    ),
+                    15,
+                    10),
+              ],
+            ),
           ),
-        ),
-        const Spacer(),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: VolumeBar(player: audioPlayer),
+          const SizedBox(height: 50),
+          //const Spacer(), //////////////////////////////////////////
+          Padding(
+            padding: const EdgeInsets.only(bottom: 25),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: VolumeBar(player: audioPlayer),
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  saveMeditation();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => InMeditationScreen()));
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(20),
+                ElevatedButton(
+                  onPressed: () {
+                    saveMeditation();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InMeditationScreen()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(20),
+                  ),
+                  child: const Icon(Icons.play_arrow),
                 ),
-                child: const Icon(Icons.play_arrow),
-              ),
-              const Spacer()
-            ],
-          ),
-        )
-      ],
-    ));
+                const Spacer()
+              ],
+            ),
+          )
+        ],
+      ),
+    )));
   }
 
   Widget buildDropdownBellStart(Function setState) {
