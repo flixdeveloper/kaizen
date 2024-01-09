@@ -1,10 +1,9 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:kaizen/settings_screen.dart';
 
 import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/home_widget.dart';
-import 'package:kaizen/menu_item.dart';
-import 'package:kaizen/menu_items.dart';
 
 late List<HomeWidget> homeWidgets;
 
@@ -21,8 +20,7 @@ class _HomeScreen extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
+    bool isDarkMode = AdaptiveTheme.of(context).mode.isDark;
 
     return Scaffold(
         floatingActionButton: FloatingActionButton(
