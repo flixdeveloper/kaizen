@@ -142,11 +142,11 @@ String bellToNum(String freq) {
   int? num = int.tryParse(freq);
   if (num != null) return num.toString();
   switch (freq) {
-    case 'bell_outside':
+    case 'Bell outside':
       return '0';
-    case 'bell_struck':
+    case 'Bell struck':
       return '1';
-    case 'gong':
+    case 'Gong':
       return '2';
     default:
       return '3';

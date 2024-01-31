@@ -56,9 +56,9 @@ class Habit {
     int? num = int.tryParse(freq);
     if (num != null) return num.toString();
     switch (freq) {
-      case 'daily':
+      case 'Daily':
         return '0';
-      case 'weekly':
+      case 'Weekly':
         return '1';
       default:
         return '2';

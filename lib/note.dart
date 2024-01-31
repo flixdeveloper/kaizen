@@ -24,12 +24,12 @@ class Note {
   String typeToNum() {
     int? num = int.tryParse(type);
     if (num != null) return num.toString();
-    if (type == 'note'.tr()) return '0';
-    if (type == 'evening_review'.tr()) return '2';
-    if (type == 'weekly_review'.tr()) return '3';
-    if (type == 'monthly_review'.tr()) return '4';
+    if (type == 'Note' || type == 'note'.tr()) return '0';
+    if (type == 'Evening Review' || type == 'evening_review'.tr()) return '2';
+    if (type == 'Weekly Review' || type == 'weekly_review'.tr()) return '3';
+    if (type == 'Monthly Review' || type == 'monthly_review'.tr()) return '4';
     if (type == 'MIQ') return '5';
-    return 'morning_mindset'.tr();
+    return '1'; //'morning_mindset'.tr()
   }
 
   void fixQuestions() {
@@ -111,13 +111,13 @@ class Note {
 
   String getType() {
     switch (this.type) {
-      case '0' || 'Note':
+      case '0':
         return 'note'.tr();
-      case '2' || 'Evening Review':
+      case '2':
         return 'evening_review'.tr();
-      case '3' || 'Weekly Review':
+      case '3':
         return 'weekly_review'.tr();
-      case '4' || 'Monthly Review':
+      case '4':
         return 'monthly_review'.tr();
       case '5':
         return 'MIQ';
@@ -167,7 +167,7 @@ class Note {
               Align(
                 alignment: Alignment.topRight,
                 child: Visibility(
-                  visible: type != '0' && type != 'Note',
+                  visible: type != '0',
                   child: Rounded(
                     Text(getType(),
                         style: const TextStyle(
