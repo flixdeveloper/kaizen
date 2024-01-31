@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -142,12 +143,12 @@ class _InMeditationScreen extends State<InMeditationScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Align(
+                        Align(
                           alignment: Alignment.topCenter,
                           child: Padding(
                             padding: EdgeInsets.only(top: 80),
                             child: Text(
-                              "Meditation",
+                              "meditation".tr(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,

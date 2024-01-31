@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,11 +8,12 @@ import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/rounded_base.dart';
 import 'package:kaizen/screens/in_meditation_screen.dart';
 import 'package:kaizen/volume_controller.dart';
+import 'dart:ui' as ui;
 
 AudioPlayer audioPlayer = AudioPlayer();
 Duration duration = const Duration(minutes: 5, seconds: 0);
-String startBell = "Gong";
-String endBell = "Gong";
+String startBell = "2";
+String endBell = "2";
 int song = 0;
 
 class MeditationScreen extends StatefulWidget {
@@ -35,8 +37,8 @@ class _MeditationScreen extends State<MeditationScreen>
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(50, 30, 50, 40),
-            child: const Text(
-              "Meditation",
+            child: Text(
+              "meditation".tr(),
               style: TextStyle(
                 fontSize: 35,
                 fontFamily: 'PTSans',
@@ -63,10 +65,10 @@ class _MeditationScreen extends State<MeditationScreen>
                         //Navigator.push(context, MaterialPageRoute(builder: (contetxt) => IconPickScreen(),),);
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Duration'),
+                          Text('duration'.tr()),
                           const Spacer(),
                           Text(printDuration(duration)),
-                          Image.asset('assets/images/next.png', scale: 3),
+                          Image.asset('nextIcon'.tr(), scale: 3),
                           ///////////////////////////////////////
                           //CupertinoTimerPicker(
                           //  mode: CupertinoTimerPickerMode.hm,
@@ -88,7 +90,7 @@ class _MeditationScreen extends State<MeditationScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Starting bell'),
+                        Text('starting_bell'.tr()),
                         const Spacer(),
                         buildDropdownBellStart(() => setState(() {})),
                       ],
@@ -100,7 +102,7 @@ class _MeditationScreen extends State<MeditationScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Ending bell'),
+                        Text('ending_bell'.tr()),
                         const Spacer(),
                         buildDropdownBellEnd(() => setState(() {})),
                       ],
@@ -115,6 +117,7 @@ class _MeditationScreen extends State<MeditationScreen>
           Padding(
             padding: const EdgeInsets.only(bottom: 25),
             child: Row(
+              textDirection: ui.TextDirection.ltr,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
@@ -148,15 +151,20 @@ class _MeditationScreen extends State<MeditationScreen>
   }
 
   Widget buildDropdownBellStart(Function setState) {
-    List<String> list = ['Bell outside', 'Bell struck', 'Gong', 'Zenbell'];
+    List<String> list = [
+      'bell_outside'.tr(),
+      'bell_struck'.tr(),
+      'gong'.tr(),
+      'zenbell'.tr()
+    ];
     return DropdownButton<String>(
-      value: startBell,
-      icon: Image.asset('assets/images/next.png', scale: 3),
+      value: list[int.parse(startBell)],
+      icon: Image.asset('nextIcon'.tr(), scale: 3),
       elevation: 6,
       onChanged: (String? value) {
         //update verb inside function?
         // This is called when the user selects an item.
-        startBell = value!;
+        startBell = list.indexOf(value!).toString();
         setState();
       },
       items: list.map<DropdownMenuItem<String>>((String value) {
@@ -169,15 +177,20 @@ class _MeditationScreen extends State<MeditationScreen>
   }
 
   Widget buildDropdownBellEnd(Function setState) {
-    List<String> list = ['Bell outside', 'Bell struck', 'Gong', 'Zenbell'];
+    List<String> list = [
+      'bell_outside'.tr(),
+      'bell_struck'.tr(),
+      'gong'.tr(),
+      'zenbell'.tr()
+    ];
     return DropdownButton<String>(
-      value: endBell,
-      icon: Image.asset('assets/images/next.png', scale: 3),
+      value: list[int.parse(endBell)],
+      icon: Image.asset('nextIcon'.tr(), scale: 3),
       elevation: 6,
       onChanged: (String? value) {
         //update verb inside function?
         // This is called when the user selects an item.
-        endBell = value!;
+        endBell = list.indexOf(value!).toString();
         setState();
       },
       items: list.map<DropdownMenuItem<String>>((String value) {
@@ -208,12 +221,12 @@ class _MeditationScreen extends State<MeditationScreen>
                 children: [
                   // Close the modal
                   CupertinoButton(
-                    child: const Text('Cancel'),
+                    child: Text('cancel'.tr()),
                     onPressed: () => Navigator.pop(context),
                   ),
                   // Save the duration and close the modal
                   CupertinoButton(
-                    child: const Text('Done'),
+                    child: Text('done'.tr()),
                     onPressed: () {
                       Navigator.pop(context);
                       setState(() {});
@@ -252,12 +265,12 @@ class _MeditationScreen extends State<MeditationScreen>
     ];
 
     final List<String> imgNames = [
-      'Autumn sky',
-      'Just relax',
-      'Peaceful garden',
-      'Piano moment',
-      'No sound',
-      'Please calm my mind',
+      'autumn_sky'.tr(),
+      'just_relax'.tr(),
+      'peaceful_garden'.tr(),
+      'piano_moment'.tr(),
+      'no_sound'.tr(),
+      'calm_my_mind'.tr(),
     ];
 
     final List<Widget> imageSliders = imgNames

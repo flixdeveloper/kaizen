@@ -6,6 +6,11 @@
   <string>en</string>
   <key>CFBundleExecutable</key>
   <string>App</string>
+  <key>CFBundleLocalizations</key>
+<array>
+	<string>en</string>
+	<string>he</string>
+</array>
   <key>CFBundleIdentifier</key>
   <string>io.flutter.flutter.app</string>
   <key>CFBundleInfoDictionaryVersion</key>

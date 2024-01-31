@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
+import 'dart:ui' as ui;
 import 'package:kaizen/view_note.dart';
 import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/note.dart';
@@ -34,8 +35,8 @@ class _NotesScreen extends State<NotesScreen>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text(
-                            "Notes",
+                          Text(
+                            "notes".tr(),
                             style: TextStyle(
                               fontSize: 35,
                               fontFamily: 'PTSans',
@@ -58,10 +59,10 @@ class _NotesScreen extends State<NotesScreen>
                               ),
                             ),
                             onPressed: () {
-                              newNoteClick([""], "Note");
+                              newNoteClick([""], "note".tr());
                             },
-                            child: const Text(
-                              "What's on your mind?",
+                            child: Text(
+                              "on_your_mind".tr(),
                               style: TextStyle(
                                 color: Color.fromARGB(255, 250, 250, 250),
                                 fontWeight: FontWeight.bold,
@@ -71,6 +72,7 @@ class _NotesScreen extends State<NotesScreen>
                           ),
                           const SizedBox(height: 10),
                           Row(
+                            textDirection: ui.TextDirection.ltr,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CircleAvatar(
@@ -87,12 +89,12 @@ class _NotesScreen extends State<NotesScreen>
                                       8,
                                   onPressed: () {
                                     newNoteClick([
-                                      "What am I grateful for today?",
-                                      "What are my top priorities for the day?",
-                                      "How can I make today successful and fulfilling?",
-                                      "What positive mindset or attitude can I adopt today?",
-                                      "How can I take care of my physical and mental well-being today?",
-                                    ], "Morning mindset");
+                                      "morning_1",
+                                      "morning_2",
+                                      "morning_3",
+                                      "morning_4",
+                                      "morning_5",
+                                    ], "morning_mindset".tr());
                                   },
                                 ),
                               ),
@@ -111,12 +113,12 @@ class _NotesScreen extends State<NotesScreen>
                                       8,
                                   onPressed: () {
                                     newNoteClick([
-                                      "What were my accomplishments and successes today?",
-                                      "What challenges did I face and how did I handle them?",
-                                      "Did I live up to my values and principles today?",
-                                      "What lessons did I learn from today's experiences?",
-                                      "How can I improve or adjust my approach for tomorrow?",
-                                    ], "Evening Review");
+                                      "evening_1",
+                                      "evening_2",
+                                      "evening_3",
+                                      "evening_4",
+                                      "evening_5",
+                                    ], "evening_review".tr());
                                   },
                                 ),
                               ),
@@ -135,12 +137,12 @@ class _NotesScreen extends State<NotesScreen>
                                       8,
                                   onPressed: () {
                                     newNoteClick([
-                                      "What were my major achievements and progress this week?",
-                                      "Did I meet my weekly goals and objectives?",
-                                      "What tasks or projects are still pending and need attention?",
-                                      "What obstacles or setbacks did I encounter and how can I overcome them?",
-                                      "How can I make next week more productive and fulfilling?",
-                                    ], "Weekly Review");
+                                      "weekly_1",
+                                      "weekly_2",
+                                      "weekly_3",
+                                      "weekly_4",
+                                      "weekly_5",
+                                    ], "weekly_review".tr());
                                   },
                                 ),
                               ),
@@ -159,12 +161,12 @@ class _NotesScreen extends State<NotesScreen>
                                       8,
                                   onPressed: () {
                                     newNoteClick([
-                                      "What were my biggest accomplishments and milestones this month?",
-                                      "Did I achieve the goals I set at the beginning of the month?",
-                                      "What areas of my life or work need improvement or adjustment?",
-                                      "How did I manage my time and priorities this month?",
-                                      "What can I do differently or better in the upcoming month?",
-                                    ], "Monthly Review");
+                                      "monthly_1",
+                                      "monthly_2",
+                                      "monthly_3",
+                                      "monthly_4",
+                                      "monthly_5",
+                                    ], "monthly_review".tr());
                                   },
                                 ),
                               ),
@@ -204,7 +206,7 @@ class _NotesScreen extends State<NotesScreen>
                                               const Color(0xFFFE4A49),
                                           foregroundColor: Colors.white,
                                           icon: Icons.delete,
-                                          label: 'Delete',
+                                          label: 'delete'.tr(),
                                         ),
                                         SlidableAction(
                                           onPressed: (context) =>
@@ -215,7 +217,7 @@ class _NotesScreen extends State<NotesScreen>
                                               const Color(0xFF21B7CA),
                                           foregroundColor: Colors.white,
                                           icon: Icons.edit,
-                                          label: 'Edit',
+                                          label: 'edit'.tr(),
                                         ),
                                       ],
                                     ),

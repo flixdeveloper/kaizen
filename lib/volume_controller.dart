@@ -54,57 +54,60 @@ class _PlayerBarState extends State<VolumeBar> with TickerProviderStateMixin {
     RenderBox box = context.findRenderObject() as RenderBox;
     Offset position = box.localToGlobal(Offset.zero);
     volumeBoxOverlayEntry = OverlayEntry(
-      builder: (context) => AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, child) {
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      hideVolumeBox();
-                    });
-                  },
-                  child: Container(
-                    color: Colors.black.withOpacity(0.1 * _animation.value),
+      builder: (context) => Directionality(
+        textDirection: TextDirection.ltr,
+        child: AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) {
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        hideVolumeBox();
+                      });
+                    },
+                    child: Container(
+                      color: Colors.black.withOpacity(0.1 * _animation.value),
+                    ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: (viewPortSize.height - position.dy + 7 - 80) +
-                    (80 * _animation.value),
-                left: position.dx,
-                width: box.size.width,
-                height:
-                    (190 - box.size.width) * _animation.value + box.size.width,
-                child: Transform.scale(
-                  scale: _animation.value,
-                  child: Opacity(
-                    opacity: _animation.value,
-                    child: Material(
-                      color: Theme.of(context).colorScheme.background,
-                      elevation: 10,
-                      borderRadius: BorderRadius.circular(100),
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: RotatedBox(
-                              quarterTurns: 3,
-                              child: PlayerVolume(
-                                player: widget.player,
+                Positioned(
+                  bottom: (viewPortSize.height - position.dy + 7 - 80) +
+                      (80 * _animation.value),
+                  left: position.dx,
+                  width: box.size.width,
+                  height: (190 - box.size.width) * _animation.value +
+                      box.size.width,
+                  child: Transform.scale(
+                    scale: _animation.value,
+                    child: Opacity(
+                      opacity: _animation.value,
+                      child: Material(
+                        color: Theme.of(context).colorScheme.background,
+                        elevation: 10,
+                        borderRadius: BorderRadius.circular(100),
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: RotatedBox(
+                                quarterTurns: 3,
+                                child: PlayerVolume(
+                                  player: widget.player,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
     Overlay.of(context).insert(volumeBoxOverlayEntry!);

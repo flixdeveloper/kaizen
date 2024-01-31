@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kaizen/article_page.dart';
 import 'package:kaizen/audio_page.dart';
@@ -39,12 +40,14 @@ class HomeWidget {
   }
 
   void navigateVideo(BuildContext context) {
+    //context.
+    //context.setLocale(Locale('en'));
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (contetxt) => VideoPage(type == "video", details),
       ),
-    );
+    ); //.then((_) => context.setLocale(Locale('he')));
   }
 
   void navigateAudio(BuildContext context) {

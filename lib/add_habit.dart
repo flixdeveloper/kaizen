@@ -1,4 +1,7 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:auto_direction/auto_direction.dart';
 import 'package:cart_stepper/cart_stepper.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +12,7 @@ import 'package:kaizen/notification_service.dart';
 import 'package:kaizen/reminder.dart';
 import 'package:kaizen/rounded_base.dart';
 import 'package:kaizen/screens/habits_me_screen.dart';
+import 'package:kaizen/screens/settings_screen.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
@@ -20,9 +24,12 @@ class AddHabit extends StatefulWidget {
 }
 
 final TextEditingController titleController = TextEditingController();
+final TextEditingController descriptionController = TextEditingController();
+var titleText = '';
+var descriptionText = '';
 int selectedIcon = 0;
 bool isBuild = true;
-String frequency = 'Daily';
+String frequency = '0';
 List<bool> customDays = List.filled(7, true);
 int goal = 1;
 bool allowReminder = false;
@@ -35,22 +42,29 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
     final habit = widget.habit;
     if (habit != null) {
       titleController.text = habit.title;
+      titleText = habit.title;
+      descriptionController.text = habit.description ?? '';
+      descriptionText = habit.description ?? '';
       selectedIcon = habit.icon;
       isBuild = habit.isBuild;
       frequency = habit.frequency;
-      customDays = habit.customDays;
+      customDays = habit.customDays.toList();
       goal = habit.goal;
       allowReminder = habit.allowReminder;
-      reminders = habit.reminders;
+      reminders = habit.copyReminders();
+    } else {
+      titleText = '';
+      descriptionText = '';
     }
   }
 
   @override
   void dispose() {
+    descriptionController.clear();
     titleController.clear();
     selectedIcon = 0;
     isBuild = true;
-    frequency = 'Daily';
+    frequency = '0';
     customDays = List.filled(7, true);
     goal = 1;
     allowReminder = false;
@@ -64,7 +78,7 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('New Habit'),
+            title: Text('new_habit'.tr()),
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -79,29 +93,70 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                         child: Column(
                           children: [
                             Rounded(
-                                TextField(
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  decoration: InputDecoration(
-                                    labelText: 'Title',
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                    ),
-                                  ),
-                                  autofocus: true,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  controller: titleController,
-                                ),
+                                AutoDirection(
+                                    text: titleText,
+                                    child: TextField(
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      decoration: InputDecoration(
+                                        labelText: 'title'.tr(),
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                        ),
+                                      ),
+                                      autofocus: true,
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                      controller: titleController,
+                                      onChanged: (str) {
+                                        setState(() {
+                                          titleText = str;
+                                        });
+                                      },
+                                    )),
+                                0,
+                                10),
+                            const SizedBox(height: 10),
+                            Rounded(
+                                AutoDirection(
+                                    text: descriptionText,
+                                    child: TextField(
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      decoration: InputDecoration(
+                                        hintText: 'description'.tr(),
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                        ),
+                                      ),
+                                      autofocus: false,
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                      controller: descriptionController,
+                                      onChanged: (str) {
+                                        setState(() {
+                                          descriptionText = str;
+                                        });
+                                      },
+                                    )),
                                 0,
                                 10),
                             const SizedBox(height: 10),
@@ -117,15 +172,14 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text('Icon'),
+                                      Text('icon'.tr()),
                                       const Spacer(),
                                       Image.asset(
                                         'assets/icons/habit_icon ($selectedIcon).png',
                                         width: 28,
                                         height: 28,
                                       ),
-                                      Image.asset('assets/images/next.png',
-                                          scale: 3),
+                                      Image.asset('nextIcon'.tr(), scale: 3),
 
                                       //reminder
                                     ],
@@ -135,12 +189,18 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                             ),
                             const SizedBox(height: 25),
                             ToggleSwitch(
+                              inactiveFgColor: Colors.black,
+                              inactiveBgColor:
+                                  AdaptiveTheme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.grey.shade800
+                                      : Colors.grey,
                               minHeight: 50,
                               minWidth:
                                   MediaQuery.of(context).size.width / 2 - 80.5,
                               initialLabelIndex: (isBuild ? 0 : 1),
                               totalSwitches: 2,
-                              labels: const ['Build habit', 'Break habit'],
+                              labels: ['build_habit'.tr(), 'break_habit'.tr()],
                               onToggle: (index) {
                                 setState(() {
                                   isBuild = index == 0;
@@ -154,7 +214,7 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text('Frequency'),
+                                    Text('frequency'.tr()),
                                     const Spacer(),
                                     buildDropdownFreq(() => setState(() {})),
                                   ],
@@ -163,13 +223,12 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                 10),
                             const SizedBox(height: 10),
                             Visibility(
-                              visible: frequency == 'Daily',
+                              visible: frequency == '0',
                               child: Column(
                                 children: [
                                   WeekdaySelector(
                                     firstDayOfWeek:
-                                        MaterialLocalizations.of(context)
-                                            .firstDayOfWeekIndex,
+                                        int.parse(SettingsScreen.firstDay),
                                     //selectedFillColor: Colors.red,
                                     //fillColor: Theme.of(context)
                                     //    .colorScheme
@@ -198,8 +257,9 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                        (isBuild == true) ? 'Goal' : 'Maximum'),
+                                    Text((isBuild == true)
+                                        ? 'goal'.tr()
+                                        : 'maximum'.tr()),
                                     const Spacer(),
                                     //var list = [for (var i = 1; i <= 10; i++) i];
                                     //buildDropdownGoal(() => setState(() {})),
@@ -236,7 +296,7 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text('Remind me'),
+                                          Text('remind_me'.tr()),
                                           const Spacer(),
                                           Switch.adaptive(
                                             value: allowReminder,
@@ -347,12 +407,14 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                               onPressed: () {
                                 String title = titleController.text;
                                 if (title.isEmpty) return;
+                                String description = descriptionController.text;
 
                                 var notificationService = NotificationService();
                                 var oldHabit = widget.habit;
                                 if (oldHabit != null) {
                                   notificationService.cancelSchedule(oldHabit);
                                   oldHabit.title = title;
+                                  oldHabit.description = description;
                                   oldHabit.icon = selectedIcon;
                                   oldHabit.isBuild = isBuild;
                                   oldHabit.frequency = frequency;
@@ -366,6 +428,7 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                                 } else {
                                   Habit habit = Habit(
                                       title,
+                                      description,
                                       selectedIcon,
                                       isBuild,
                                       frequency,
@@ -382,8 +445,8 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
                               },
                               child: Text(
                                 (widget.habit != null)
-                                    ? "Save habit"
-                                    : "Add habit",
+                                    ? "update_habit".tr()
+                                    : "add_habit".tr(),
                                 style: const TextStyle(
                                   color: Color.fromARGB(255, 250, 250, 250),
                                   fontSize: 18,
@@ -400,15 +463,15 @@ class _AddHabit extends State<AddHabit> with SingleTickerProviderStateMixin {
   }
 
   Widget buildDropdownFreq(Function setState) {
-    List<String> list = ['Daily', 'Weekly', 'Monthly'];
+    List<String> list = ['daily'.tr(), 'weekly'.tr(), 'monthly'.tr()];
     return DropdownButton<String>(
-      value: frequency,
-      icon: Image.asset('assets/images/next.png', scale: 3),
+      value: list[int.parse(frequency)],
+      icon: Image.asset('nextIcon'.tr(), scale: 3),
       elevation: 6,
       onChanged: (String? value) {
         //update verb inside function?
         // This is called when the user selects an item.
-        frequency = value!;
+        frequency = list.indexOf(value!).toString();
         setState();
       },
       items: list.map<DropdownMenuItem<String>>((String value) {

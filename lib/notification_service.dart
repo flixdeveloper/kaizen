@@ -71,9 +71,7 @@ class NotificationService {
   void cancelSchedule(Habit habit) {
     for (Reminder reminder in habit.reminders) {
       for (int day in [0, 1, 2, 3, 4, 5, 6]) {
-        if (reminder.days[day]) {
-          notificationsPlugin.cancel(reminder.id + day);
-        }
+        notificationsPlugin.cancel(reminder.id + day);
       }
     }
   }
@@ -82,7 +80,10 @@ class NotificationService {
     if (habit.allowReminder) {
       for (var reminder in habit.reminders) {
         scheduleNotification(
-            title: habit.title, reminder: reminder, icon: habit.icon);
+            title: habit.title,
+            body: habit.description,
+            reminder: reminder,
+            icon: habit.icon);
       }
     }
   }

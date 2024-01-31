@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kaizen/add_habit.dart';
@@ -5,6 +6,7 @@ import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/habit.dart';
 import 'package:kaizen/notification_service.dart';
 import 'package:kaizen/rounded_base.dart';
+import 'dart:ui' as ui;
 
 late List<Habit> habits;
 
@@ -23,90 +25,79 @@ class _HabitsMeScreen extends State<HabitsMeScreen>
     List<Habit> weekly = List.empty(growable: true);
     List<Habit> monthly = List.empty(growable: true);
     for (var habit in habits) {
-      if (habit.frequency == "Daily") {
-        daily.add(habit);
-      } else if (habit.frequency == "Weekly") {
-        weekly.add(habit);
-      } else {
-        monthly.add(habit);
+      switch (int.parse(habit.frequency)) {
+        case 0:
+          daily.add(habit);
+        case 1:
+          weekly.add(habit);
+        default:
+          monthly.add(habit);
       }
     }
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        backgroundColor: Colors.blueGrey,
-        onPressed: () => {
-          //addHabbitSheet(context),
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (contetxt) => const AddHabit(),
-            ),
-          ).then((_) {
-            setState(() {});
-          })
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
-                child: Text(
-                  "Habits",
-                  style: TextStyle(
-                    fontSize: 35,
-                    fontFamily: 'PTSans',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+        floatingActionButton: FloatingActionButton(
+          shape: const CircleBorder(),
+          backgroundColor: Colors.blueGrey,
+          onPressed: () => {
+            //addHabbitSheet(context),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (contetxt) => const AddHabit(),
               ),
-              if (daily.isNotEmpty)
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(80, 0, 80, 10),
-                  child: Text(
-                    'Daily',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              if (daily.isNotEmpty) GroupHabits(daily),
-              if (weekly.isNotEmpty)
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
-                  child: Text(
-                    'Weekly',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              if (weekly.isNotEmpty) GroupHabits(weekly),
-              if (monthly.isNotEmpty)
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
-                  child: Text(
-                    'Monthly',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              if (monthly.isNotEmpty) GroupHabits(monthly),
-              const SizedBox(height: 15)
-            ],
-          ),
+            ).then((_) {
+              setState(() {});
+            })
+          },
+          child: const Icon(Icons.add),
         ),
-      ),
-    );
+        body: Padding(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (daily.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
+                    child: Text(
+                      'daily'.tr(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                if (daily.isNotEmpty) GroupHabits(daily),
+                if (weekly.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
+                    child: Text(
+                      'weekly'.tr(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                if (weekly.isNotEmpty) GroupHabits(weekly),
+                if (monthly.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
+                    child: Text(
+                      'monthly'.tr(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                if (monthly.isNotEmpty) GroupHabits(monthly),
+                const SizedBox(height: 15)
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget GroupHabits(List<Habit> habitsByType) {
@@ -134,7 +125,7 @@ class _HabitsMeScreen extends State<HabitsMeScreen>
                   backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,
                   icon: Icons.delete,
-                  label: 'Delete',
+                  label: 'delete'.tr(),
                 ),
                 SlidableAction(
                   onPressed: (context) => {
@@ -149,15 +140,14 @@ class _HabitsMeScreen extends State<HabitsMeScreen>
                   backgroundColor: const Color(0xFF21B7CA),
                   foregroundColor: Colors.white,
                   icon: Icons.edit,
-                  label: 'Edit',
+                  label: 'edit'.tr(),
                 ),
               ],
             ),
             child: GestureDetector(
               onTap: () => {
                 //action
-                habit.did++,
-                saveHabit(habits),
+                habit.didPlus(context),
                 Feedback.forTap(context),
                 setState(() {})
               },
@@ -190,43 +180,54 @@ class _HabitsMeScreen extends State<HabitsMeScreen>
                 ),
                 const SizedBox(height: 5),
                 Text((habit.isBuild)
-                    ? "Goal: ${habit.goal}"
-                    : "Maximum: ${habit.goal}"),
+                    ? "goal_plus".tr(args: ['${habit.goal}'])
+                    : "maximum_plus".tr(args: ['${habit.goal}']))
               ],
             ),
             const Spacer(),
-            TweenAnimationBuilder(
-                key: ValueKey(habit.did),
-                duration: const Duration(seconds: 1),
-                curve: Curves.elasticOut,
-                tween: Tween<double>(begin: 0.5, end: 1.1),
-                builder: (context, value, _) {
-                  return Transform.scale(
-                      scale: (value - 0.8).abs() + 0.8,
-                      child: Stack(children: [
-                        inCircle(habit),
-                        SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: TweenAnimationBuilder<double>(
-                            tween: Tween<double>(
-                                begin: (habit.did - 1) / habit.goal,
-                                end: habit.did / habit.goal),
-                            duration: const Duration(milliseconds: 400),
-                            builder: (context, value, _) =>
-                                CircularProgressIndicator(
-                                    value: value,
-                                    backgroundColor: ((!habit.isBuild)
-                                        ? Colors.green
-                                        : Colors.grey),
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        (habit.isBuild)
-                                            ? Colors.green
-                                            : Colors.green.shade200)),
+            Directionality(
+              textDirection: ui.TextDirection.ltr,
+              child: TweenAnimationBuilder(
+                  key: ValueKey(habit.did),
+                  duration: const Duration(seconds: 1),
+                  curve: Curves.elasticOut,
+                  tween: Tween<double>(begin: 0.5, end: 1.1),
+                  builder: (context, value, _) {
+                    return Transform.scale(
+                        scale: (value - 0.8).abs() + 0.8,
+                        child: Stack(children: [
+                          inCircle(habit),
+                          SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: TweenAnimationBuilder<double>(
+                              tween: Tween<double>(
+                                  begin: (habit.did - 1) / habit.goal,
+                                  end: habit.did / habit.goal),
+                              duration: const Duration(milliseconds: 400),
+                              builder: (context, value, _) =>
+                                  CircularProgressIndicator(
+                                      value: value,
+                                      backgroundColor: ((!habit.isBuild) ||
+                                              (habit.frequency == '0' &&
+                                                  !habit.customDays[
+                                                      DateTime.now().weekday %
+                                                          7])
+                                          ? Colors.green
+                                          : Colors.grey),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          (habit.isBuild) ||
+                                                  (habit.frequency == '0' &&
+                                                      !habit.customDays[
+                                                          DateTime.now().weekday %
+                                                              7])
+                                              ? Colors.green
+                                              : Colors.green.shade200)),
+                            ),
                           ),
-                        ),
-                      ]));
-                }),
+                        ]));
+                  }),
+            ),
           ],
         ),
         20,
@@ -236,7 +237,9 @@ class _HabitsMeScreen extends State<HabitsMeScreen>
 }
 
 Widget inCircle(Habit habit) {
-  if (habit.did == habit.goal) {
+  bool isNOTDay =
+      habit.frequency == '0' && !habit.customDays[DateTime.now().weekday % 7];
+  if (habit.did == habit.goal || isNOTDay) {
     return TweenAnimationBuilder(
         curve: Curves.decelerate,
         tween: Tween<double>(begin: 0, end: 1),

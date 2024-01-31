@@ -1,5 +1,7 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:just_audio/just_audio.dart';
@@ -17,22 +19,11 @@ class SettingsScreen extends StatefulWidget {
   static late String firstDay;
   static late String darkMode;
 
-  static int firstDayIndex() {
-    switch (firstDay) {
-      case "Saturday":
-        return 6;
-      case "Monday":
-        return 1;
-      default:
-        return 0;
-    }
-  }
-
   static initDarkMode(BuildContext context) {
     switch (darkMode) {
-      case 'Light Mode':
+      case '2':
         AdaptiveTheme.of(context).setLight();
-      case 'Dark Mode':
+      case '1':
         AdaptiveTheme.of(context).setDark();
       default:
         AdaptiveTheme.of(context).setSystem();
@@ -45,6 +36,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreen extends State<SettingsScreen>
     with SingleTickerProviderStateMixin {
+  late var tmpLanguage = context.locale.toString();
   var tmpIs24 = SettingsScreen.is24 ? '24h' : '12h';
   var tmpFirstDay = SettingsScreen.firstDay.substring(0);
   var tmpDarkMode = SettingsScreen.darkMode.substring(0);
@@ -52,7 +44,7 @@ class _SettingsScreen extends State<SettingsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text('settings'.tr()),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -66,7 +58,7 @@ class _SettingsScreen extends State<SettingsScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Time Format'),
+                        Text('time_format'.tr()),
                         const Spacer(),
                         buildDropdownTimeFormat(() => setState(() {})),
                       ],
@@ -78,7 +70,7 @@ class _SettingsScreen extends State<SettingsScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('First Day Of Week'),
+                        Text('first_day'.tr()),
                         const Spacer(),
                         buildDropdownFirstDay(() => setState(() {})),
                       ],
@@ -90,9 +82,21 @@ class _SettingsScreen extends State<SettingsScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Dark Mode'),
+                        Text('dark'.tr()),
                         const Spacer(),
                         buildDropdownDarkMode(() => setState(() {})),
+                      ],
+                    ),
+                    15,
+                    10),
+                const SizedBox(height: 10),
+                Rounded(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('language'.tr()),
+                        const Spacer(),
+                        buildDropdownLanguage(() => setState(() {})),
                       ],
                     ),
                     15,
@@ -111,11 +115,12 @@ class _SettingsScreen extends State<SettingsScreen>
                     SettingsScreen.firstDay = tmpFirstDay;
                     SettingsScreen.is24 = tmpIs24 == "24h";
                     SettingsScreen.initDarkMode(context);
+                    context.setLocale(Locale(tmpLanguage));
                     saveSettings(tmpIs24 == "24h", tmpFirstDay, tmpDarkMode);
                     Navigator.pop(context);
                   },
                   child: Text(
-                    "Save Changes",
+                    "save".tr(),
                     style: const TextStyle(
                       color: Color.fromARGB(255, 250, 250, 250),
                       fontSize: 18,
@@ -143,7 +148,7 @@ class _SettingsScreen extends State<SettingsScreen>
                     );
                   },
                   child: Text(
-                    "Logout",
+                    "out".tr(),
                     style: const TextStyle(
                       fontSize: 18,
                     ),
@@ -159,26 +164,11 @@ class _SettingsScreen extends State<SettingsScreen>
                     ),
                   ),
                   onPressed: () {
-                    try {
-                      deleteEveryData();
-                      deleteDetails();
-
-                      deleteUserAccount();
-
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
-                        (Route<dynamic> route) => false,
-                      );
-                    } catch (_) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            "The account deletion process was either unsuccessful or only partially successful!"),
-                      ));
-                    }
+                    showDeleteDialog(context);
                   },
                   child: Text(
-                    "Delete Account",
+                    //TODO: popup are you sure
+                    "delete_account".tr(),
                     style: const TextStyle(
                       color: Color.fromARGB(255, 250, 250, 250),
                       fontSize: 18,
@@ -191,16 +181,78 @@ class _SettingsScreen extends State<SettingsScreen>
     );
   }
 
+  void showDeleteDialog(BuildContext context) {
+    showCupertinoDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return CupertinoAlertDialog(
+            title: Text('confirm_text'.tr()),
+            actions: [
+              // The "Yes" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  try {
+                    deleteEveryData();
+                    deleteDetails();
+
+                    deleteUserAccount();
+
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      (Route<dynamic> route) => false,
+                    );
+                  } catch (_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("fail_delete".tr())));
+                  }
+                },
+                isDefaultAction: true,
+                isDestructiveAction: true,
+                child: Text('yes'.tr()),
+              ),
+              // The "No" button
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                isDefaultAction: false,
+                isDestructiveAction: false,
+                child: Text('no'.tr()),
+              )
+            ],
+          );
+        });
+  }
+
+  String firstDayToString(String firstDay) {
+    switch (firstDay) {
+      case "6":
+        return 'saturday'.tr();
+      case "1":
+        return 'monday'.tr();
+      default:
+        return 'sunday'.tr();
+    }
+  }
+
+  String firstDayToIndex(String firstDay) {
+    if (firstDay == 'saturday'.tr()) return '6';
+    if (firstDay == 'monday'.tr()) return '1';
+    return '0';
+  }
+
   Widget buildDropdownFirstDay(Function setState) {
-    List<String> list = ['Sunday', 'Monday', 'Saturday'];
+    List<String> list = ['sunday'.tr(), 'monday'.tr(), 'saturday'.tr()];
     return DropdownButton<String>(
-      value: tmpFirstDay,
-      icon: Image.asset('assets/images/next.png', scale: 3),
+      value: firstDayToString(tmpFirstDay),
+      icon: Image.asset('nextIcon'.tr(), scale: 3),
       elevation: 6,
       onChanged: (String? value) {
         //update verb inside function?
         // This is called when the user selects an item.
-        tmpFirstDay = value!;
+        tmpFirstDay = firstDayToIndex(value!);
         setState();
       },
       items: list.map<DropdownMenuItem<String>>((String value) {
@@ -216,7 +268,7 @@ class _SettingsScreen extends State<SettingsScreen>
     List<String> list = ['12h', '24h'];
     return DropdownButton<String>(
       value: tmpIs24,
-      icon: Image.asset('assets/images/next.png', scale: 3),
+      icon: Image.asset('nextIcon'.tr(), scale: 3),
       elevation: 6,
       onChanged: (String? value) {
         //update verb inside function?
@@ -233,14 +285,50 @@ class _SettingsScreen extends State<SettingsScreen>
     );
   }
 
+  String darkModeToString(String firstDay) {
+    switch (firstDay) {
+      case "0":
+        return 'default'.tr();
+      case "1":
+        return 'dark'.tr();
+      default:
+        return 'light'.tr();
+    }
+  }
+
+  String darkModeToIndex(String firstDay) {
+    if (firstDay == 'default'.tr()) return '0';
+    if (firstDay == 'dark'.tr()) return '1';
+    return '2';
+  }
+
   Widget buildDropdownDarkMode(Function setState) {
-    List<String> list = ['Default', 'Dark Mode', 'Light Mode'];
+    List<String> list = ['default'.tr(), 'dark'.tr(), 'light'.tr()];
     return DropdownButton<String>(
-      value: tmpDarkMode,
-      icon: Image.asset('assets/images/next.png', scale: 3),
+      value: darkModeToString(tmpDarkMode),
+      icon: Image.asset('nextIcon'.tr(), scale: 3),
       elevation: 6,
       onChanged: (String? value) {
-        tmpDarkMode = value!;
+        tmpDarkMode = darkModeToIndex(value!);
+        setState();
+      },
+      items: list.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget buildDropdownLanguage(Function setState) {
+    List<String> list = ['en', 'he'];
+    return DropdownButton<String>(
+      value: tmpLanguage,
+      icon: Image.asset('nextIcon'.tr(), scale: 3),
+      elevation: 6,
+      onChanged: (String? value) {
+        tmpLanguage = value!;
         setState();
       },
       items: list.map<DropdownMenuItem<String>>((String value) {
@@ -255,17 +343,28 @@ class _SettingsScreen extends State<SettingsScreen>
   void deleteDetails() {
     SettingsScreen.is24 = MediaQuery.of(context).alwaysUse24HourFormat;
     SettingsScreen.firstDay =
-        firstDayToString(MaterialLocalizations.of(context).firstDayOfWeekIndex);
-    SettingsScreen.darkMode = 'Default';
+        MaterialLocalizations.of(context).firstDayOfWeekIndex.toString();
+    SettingsScreen.darkMode = '0';
     AdaptiveTheme.of(context).setSystem();
     audioPlayer = AudioPlayer();
     duration = const Duration(minutes: 5, seconds: 0);
-    startBell = "Gong";
-    endBell = "Gong";
+    startBell = '2';
+    endBell = '2';
     song = 0;
     habits = [];
     notes = [];
     homeWidgets = [];
     FlutterLocalNotificationsPlugin().cancelAll();
+  }
+
+  getFirstDay(int day) {
+    switch (day) {
+      case 6:
+        return "saturday".tr();
+      case 1:
+        return "monday".tr();
+      default:
+        return "sunday".tr();
+    }
   }
 }

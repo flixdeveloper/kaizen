@@ -8,6 +8,7 @@ part of 'habit.dart';
 
 Habit _$HabitFromJson(Map<String, dynamic> json) => Habit(
       json['title'] as String,
+      json['description'] as String?,
       json['icon'] as int,
       json['isBuild'] as bool,
       json['frequency'] as String,
@@ -18,11 +19,14 @@ Habit _$HabitFromJson(Map<String, dynamic> json) => Habit(
           .map((e) => Reminder.fromJson(e as Map<String, dynamic>))
           .toList(),
     )
+      ..id = json['id'] as int?
       ..did = json['did'] as int
       ..resetAt = DateTime.parse(json['resetAt'] as String);
 
 Map<String, dynamic> _$HabitToJson(Habit instance) => <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
+      'description': instance.description,
       'icon': instance.icon,
       'isBuild': instance.isBuild,
       'frequency': instance.frequency,

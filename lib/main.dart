@@ -1,28 +1,32 @@
-//import 'package:device_preview/device_preview.dart'; //
-//import 'package:flutter/foundation.dart'; //
-//import 'package:audio_service/audio_service.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kaizen/audio_player_handler.dart';
-//import 'package:kaizen/audio_player_handler.dart';
 import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/habit.dart';
+import 'package:kaizen/note.dart';
 import 'package:kaizen/notification_service.dart';
+import 'package:kaizen/screens/goals_screen.dart';
 import 'package:kaizen/screens/habits_me_screen.dart';
+import 'package:kaizen/screens/habits_screen.dart';
 import 'package:kaizen/screens/home_screen.dart';
 import 'package:kaizen/screens/notes_screen.dart';
+import 'package:kaizen/screens/settings_screen.dart';
 import 'package:kaizen/screens/splash_screen.dart';
 import 'package:kaizen/screens/meditation_screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:kaizen/theme/theme.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:kaizen/view_note.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
+late Note miq;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
   tz.initializeTimeZones();
+  await EasyLocalization.ensureInitialized();
   await initFirebase();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -45,7 +49,11 @@ void main() async {
   //);
 
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
-  runApp(MyApp(savedThemeMode: savedThemeMode));
+  runApp(EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('he')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      child: MyApp(savedThemeMode: savedThemeMode)));
   //runApp(
   //  DevicePreview(
   //    enabled: !kReleaseMode,
@@ -69,6 +77,9 @@ class MyApp extends StatelessWidget {
         title: 'kaizen',
         theme: theme,
         darkTheme: darkTheme,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         home: const SplashScreen(),
         navigatorKey: NotificationService.navigatorKey, // set property
       ),
@@ -100,20 +111,108 @@ class _MyHomePageState extends State<MyHomePage> {
     const HomeScreen(),
     const NotesScreen(),
     const MeditationScreen(),
-    const HabitsMeScreen(),
+    const HabitsScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
-    for (Habit habit in habits) {
-      habit.resetHabit(context);
-    }
+    //for (Habit habit in habits) {
+    //  habit.resetHabit(context);
+    //}
+  }
+
+  buildMIQ() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (contetxt) => buildUpdateNote(context, miq, isMiq: true),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    var tilePadding = const EdgeInsets.only(left: 8.0, right: 8, top: 8);
+    var drawer = Drawer(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      elevation: 0,
+      child: Column(
+        children: [
+          DrawerHeader(
+            child: Text(
+              'KaiZen',
+              style: TextStyle(
+                fontSize: 50,
+                fontFamily: 'kaushanScript',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Padding(
+            padding: tilePadding,
+            child: ListTile(
+              leading: Icon(Icons.workspace_premium),
+              title: Text(
+                'goals'.tr(),
+                style: TextStyle(),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (contetxt) => const GoalsScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: tilePadding,
+            child: ListTile(
+              leading: Icon(Icons.psychology_alt),
+              title: Text(
+                'MIQ',
+                style: TextStyle(),
+              ),
+              onTap: () => buildMIQ(),
+            ),
+          ),
+          Padding(
+            padding: tilePadding,
+            child: ListTile(
+              leading: Icon(Icons.settings),
+              title: Text(
+                'settings'.tr(),
+                style: TextStyle(),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (contetxt) => const SettingsScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+
+        ///////////////////////////////////////////////////////////
+        //)
+        ////////////////////////////////////////////////////////////
+        //buildMIQ()
+        //Navigator.push(
+        //  context,
+        //  MaterialPageRoute(
+        //    builder: (contetxt) => const GoalsScreen(),
+        //  ),
+        //)
+      ),
+    );
+
     return Scaffold(
+        drawer: drawer,
         body: _pageOptions[selectedPage],
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -139,22 +238,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 duration: const Duration(milliseconds: 400),
                 tabBackgroundColor: Theme.of(context).colorScheme.background,
                 color: Theme.of(context).colorScheme.onSurface,
-                tabs: const [
+                tabs: [
                   GButton(
                     icon: Icons.home,
-                    text: 'Home',
+                    text: 'home'.tr(),
                   ),
                   GButton(
                     icon: Icons.sticky_note_2,
-                    text: 'Notes',
+                    text: 'notes'.tr(),
                   ),
                   GButton(
                     icon: Icons.self_improvement, //MyFlutterApp.meditation,
-                    text: 'Meditation',
+                    text: 'meditation'.tr(),
                   ),
                   GButton(
                     icon: Icons.check_circle,
-                    text: 'Habits',
+                    text: 'habits'.tr(),
                   ),
                 ],
                 selectedIndex: selectedPage,

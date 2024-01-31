@@ -4,10 +4,11 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/main.dart';
 import 'package:kaizen/notification_service.dart';
+import 'package:kaizen/screens/goals_screen.dart';
 import 'package:kaizen/screens/habits_me_screen.dart';
 import 'package:kaizen/screens/home_screen.dart';
 import 'package:kaizen/screens/notes_screen.dart';
-import 'package:kaizen/settings_screen.dart';
+import 'package:kaizen/screens/settings_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,7 +36,9 @@ class _LoginScreen extends State<LoginScreen>
     await initSettings(context);
     SettingsScreen.initDarkMode(context);
     initMeditation();
-    habits = await getHabits();
+    miq = await getMiq();
+    habits = await getHabits(context);
+    goals = await getGoals();
     notes = await getNotes();
     homeWidgets = await getHomeWidgets();
     for (var habit in habits) {
@@ -55,7 +58,9 @@ class _LoginScreen extends State<LoginScreen>
     await initSettings(context);
     SettingsScreen.initDarkMode(context);
     initMeditation();
-    habits = await getHabits();
+    miq = await getMiq();
+    habits = await getHabits(context);
+    goals = await getGoals();
     notes = await getNotes();
     homeWidgets = await getHomeWidgets();
     for (var habit in habits) {
@@ -81,7 +86,9 @@ class _LoginScreen extends State<LoginScreen>
     await initSettings(context);
     SettingsScreen.initDarkMode(context);
     initMeditation();
-    habits = await getHabits();
+    miq = await getMiq();
+    habits = await getHabits(context);
+    goals = await getGoals();
     notes = await getNotes();
     homeWidgets = await getHomeWidgets();
     for (var habit in habits) {

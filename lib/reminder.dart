@@ -1,8 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaizen/add_habit.dart';
-import 'package:kaizen/settings_screen.dart';
+import 'package:kaizen/screens/settings_screen.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
 part 'reminder.g.dart';
@@ -27,6 +28,15 @@ class Reminder {
 
   /// Connect the generated [_$PersonToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$ReminderToJson(this);
+
+  static copyOf(Reminder reminder) {
+    final copy = Reminder(
+        DateTime.fromMillisecondsSinceEpoch(
+            reminder.time.millisecondsSinceEpoch),
+        reminder.days.toList());
+    copy.id = reminder.id;
+    return copy;
+  }
 }
 
 Widget reminderPick(
@@ -42,7 +52,7 @@ Widget reminderPick(
     time = DateTime.now();
     customDaysSet = List<bool>.filled(7, true);
   }
-  if (frequency == 'Daily') {
+  if (frequency == '0') {
     for (int i = 0; i < customDaysSet.length; i++) {
       if (customDays[i] == false) customDaysSet[i] = false;
     }
@@ -50,7 +60,7 @@ Widget reminderPick(
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Set reminder'),
+        title: Text('set_reminder'.tr()),
       ),
       //body: Container(
       //  height: MediaQuery.of(context).size.height * .35,
@@ -84,7 +94,7 @@ Widget reminderPick(
             ),
             WeekdaySelector(
               //selectedFillColor: Colors.red,
-              firstDayOfWeek: SettingsScreen.firstDayIndex(),
+              firstDayOfWeek: int.parse(SettingsScreen.firstDay),
               //fillColor: Theme.of(context).colorScheme.primaryContainer,
               onChanged: (int day) {
                 setState(() {
@@ -95,7 +105,7 @@ Widget reminderPick(
                   // perform validation, a DB write, an HTTP call or anything
                   // else before you actually flip the value,
                   // it's up to your app's needs.
-                  if (frequency == 'Daily') {
+                  if (frequency == '0') {
                     if (customDays[index]) {
                       customDaysSet[index] = !customDaysSet[index];
                     }
@@ -112,8 +122,6 @@ Widget reminderPick(
               children: [
                 if (update != null)
                   Expanded(
-                      child: Visibility(
-                    visible: true, //////////////////////
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors
@@ -129,13 +137,13 @@ Widget reminderPick(
                         refreshParent();
                       },
                       child: Text(
-                        "Delete",
+                        "delete".tr(),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                     ),
-                  )),
+                  ),
                 if (update != null) const SizedBox(width: 20), /////////////////
                 Expanded(
                   child: Padding(
@@ -163,7 +171,7 @@ Widget reminderPick(
                         refreshParent();
                       },
                       child: Text(
-                        "Confirm",
+                        "confirm".tr(),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:kaizen/add_habit.dart';
 
@@ -23,7 +24,7 @@ Widget iconPick(BuildContext context, Function refreshParent) {
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Pick an icon'),
+          title: Text('pick_an_icon'.tr()),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -31,10 +32,10 @@ Widget iconPick(BuildContext context, Function refreshParent) {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Align(
-                    alignment: Alignment(-0.65, 0),
+                  Align(
+                    alignment: AlignmentDirectional(-0.65, 0),
                     child: Text(
-                      "Icons:",
+                      "icons".tr(),
                       style: TextStyle(fontSize: 18),
                     ),
                   ),

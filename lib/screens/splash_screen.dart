@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/main.dart';
+import 'package:kaizen/screens/goals_screen.dart';
 import 'package:kaizen/screens/habits_me_screen.dart';
 import 'package:kaizen/screens/home_screen.dart';
 import 'package:kaizen/screens/login_screen.dart';
@@ -19,18 +21,24 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  bool didStart = false;
   late Timer timer;
+  late Widget nextScreen;
 
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    asyncInit();
+  }
 
+  Future<void> asyncInit() async {
+    nextScreen = await getNext(context);
     timer = Timer(const Duration(seconds: 7), () => replaceScreen());
+    didStart = true;
   }
 
   Future<void> replaceScreen() async {
-    var nextScreen = await getNext(context);
     try {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -54,8 +62,10 @@ class _SplashScreenState extends State<SplashScreen>
       body: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            replaceScreen();
-            timer.cancel();
+            if (didStart) {
+              replaceScreen();
+              timer.cancel();
+            }
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,12 +92,12 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Align(
+                      Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 30.0),
                           child: Text(
-                            '“',
+                            '“'.tr(),
                             style: TextStyle(
                               fontSize: 60,
                               fontWeight: FontWeight.bold,
@@ -106,6 +116,7 @@ class _SplashScreenState extends State<SplashScreen>
                                   sentence[0],
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
+                                      fontWeight: FontWeight.bold,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .primary),
@@ -128,12 +139,12 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ),
                       ),
-                      const Align(
+                      Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 30.0),
                           child: Text(
-                            '”',
+                            '”'.tr(),
                             textAlign: TextAlign.end,
                             style: TextStyle(
                               fontSize: 60,
@@ -153,7 +164,7 @@ class _SplashScreenState extends State<SplashScreen>
                       const EdgeInsets.fromLTRB(0, 0, 0, 40), //add padding here
                   //change padding to be only from bottom?
                   child: Text(
-                    'TAP TO DISMISS',
+                    'TAP TO DISMISS'.tr(),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary),
                   ),
@@ -170,7 +181,9 @@ Future<Widget> getNext(BuildContext context) async {
     if (FirebaseAuth.instance.currentUser != null) {
       initSettings(context);
       initMeditation();
-      habits = await getHabits();
+      miq = await getMiq();
+      habits = await getHabits(context);
+      goals = await getGoals();
       notes = await getNotes();
       homeWidgets = await getHomeWidgets();
       return const MyHomePage();
@@ -181,148 +194,67 @@ Future<Widget> getNext(BuildContext context) async {
 
 List<String> getSentence(int num) {
   switch (num) {
-    //case 0:
-    //  return [
-    //    "Life is like a ladder. You need to take one step at a time to reach the top."
-    //  ];
     case 1:
-      return [
-        "The best way to predict the future is to create it.",
-        "Abraham Lincoln"
-      ];
+      return ["splash_1".tr(), "splash_2".tr()];
     case 2:
-      return [
-        "Life is not always perfect, but that doesn’t mean you can’t enjoy it."
-      ];
+      return ["splash_3".tr()];
     case 3:
-      return [
-        "The most important thing in life is not what you have, but who you are.",
-        "Oprah Winfrey"
-      ];
+      return ["splash_4".tr(), "splash_5".tr()];
     case 4:
-      return [
-        "The key to happiness is to find what you love to do and make it your profession.",
-        "Steven Covey"
-      ];
+      return ["splash_6".tr(), "splash_7".tr()];
     case 5:
-      return ["Life is too short to waste it on things you don’t love."];
+      return ["splash_8".tr()];
     case 6:
-      return [
-        "The best way to start a new day is to forgive yourself for the past."
-      ];
-    //case 7:
-    //  return [
-    //    "The best way to look forward is to focus on what you want to achieve, not what you fear."
-    //  ];
+      return ["splash_9".tr()];
+    case 7:
+      return ["splash_10".tr(), "splash_11".tr()];
     case 8:
-      return [
-        "The best way to make a dream come true is to wake up and start working on it.",
-        "Nelson Mandela"
-      ];
+      return ["splash_12".tr(), "splash_13".tr()];
     case 9:
-      return [
-        "The best way to overcome fear is to confront it.",
-        "Albert Einstein"
-      ];
+      return ["splash_51".tr()];
     case 10:
-      return [
-        "The best way to find yourself is to lose yourself in something greater.",
-        "Albert Einstein"
-      ];
+      return ["splash_14".tr(), "splash_11".tr()];
     case 11:
-      return ["The best way to find love is to be loving.", "Buddha"];
+      return ["splash_16".tr(), "splash_17".tr()];
     case 12:
-      return ["The best way to learn is to teach.", "John Dewey"];
+      return ["splash_18".tr(), "splash_19".tr()];
     case 13:
-      return [
-        "The best way to start over is to stop trying to start over.",
-        "Steven Covey"
-      ];
+      return ["splash_20".tr(), "splash_7".tr()];
     case 14:
-      return [
-        "The best way to stop worrying is to start doing something.",
-        "Steven Covey"
-      ];
-    //case 15:
-    //  return [
-    //    "The best way to feel good about yourself is to help others feel good about themselves."
-    //  ];
+      return ["splash_22".tr(), "splash_7".tr()];
+    case 15:
+      return ["splash_52".tr(), "splash_23".tr()];
     case 16:
-      return ["The best way to combat lies is with truth.", "Buddha"];
+      return ["splash_24".tr(), "splash_17".tr()];
     case 17:
-      return [
-        "The best way to succeed is to believe that you can.",
-        "Steven Covey"
-      ];
+      return ["splash_26".tr(), "splash_7".tr()];
     case 18:
-      return ["The best way to feel blessed is to acknowledge your blessings."];
+      return ["splash_28".tr()];
     case 19:
-      return [
-        "The best way to make the world a better place is to start with yourself."
-      ];
+      return ["splash_29".tr()];
     case 20:
-      return [
-        "If you don’t believe in yourself, no one else will.",
-        "Oprah Winfrey"
-      ];
+      return ["splash_53".tr(), "splash_5".tr()];
     case 21:
-      return [
-        "If you want to achieve something, you must be willing to work hard.",
-        "Dwight Eisenhower"
-      ];
+      return ["splash_31".tr(), "splash_32".tr()];
     case 22:
-      return [
-        "Everything is possible if you just believe in yourself.",
-        "Steven Covey"
-      ];
+      return ["splash_33".tr(), "splash_7".tr()];
     case 23:
-      return [
-        "If you’re not trying, you’re already losing.",
-        "George Bernard Shaw"
-      ];
+      return ["splash_35".tr(), "splash_36".tr()];
     case 24:
-      return ["The only way to succeed is to try.", "John Stuart Mill"];
+      return ["splash_37".tr(), "splash_38".tr()];
     case 25:
-      return [
-        "The best way to predict the future is to create it.",
-        "Abraham Lincoln"
-      ];
+      return ["splash_54".tr()];
     case 26:
-      return ["If you can’t imagine it, you can’t achieve it.", "Zig Ziglar"];
+      return ["splash_39".tr(), "splash_40".tr()];
     case 27:
-      return [
-        "Life is what happens to you while you’re busy making other plans.",
-        "John Lennon"
-      ];
+      return ["splash_41".tr(), "splash_42".tr()];
     case 28:
-      return [
-        "If you can’t make it happen, find someone who can.",
-        "Albert Einstein"
-      ];
+      return ["splash_43".tr(), "splash_11".tr()];
     case 29:
-      return [
-        "The best way to start is to stop talking and start doing.",
-        "Winston Churchill"
-      ];
+      return ["splash_45".tr(), "splash_46".tr()];
     case 30:
-      return [
-        "If you don’t like something, change it. If you can’t change it, change your attitude towards it.",
-        "Milton H. Erickson"
-      ];
-    case 7: //31
-      return [
-        "The best way to overcome fear is to confront it.",
-        "Albert Einstein"
-      ];
-    case 15: //32
-      return [
-        "If you want to be successful, you must be willing to fail.",
-        "Tony Robbins"
-      ];
+      return ["splash_47".tr(), "splash_48".tr()];
     default:
-      return [
-        "The only way to do great work is to love what you do.",
-        "Steve Jobs"
-      ];
+      return ["splash_49".tr(), "splash_50".tr()];
   }
 }

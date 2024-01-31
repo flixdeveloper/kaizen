@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:kaizen/settings_screen.dart';
+import 'package:kaizen/goal.dart';
+import 'package:kaizen/heat_object.dart';
+import 'package:kaizen/screens/settings_screen.dart';
 import 'package:kaizen/firebase_options.dart';
 import 'package:kaizen/habit.dart';
 import 'package:kaizen/home_widget.dart';
@@ -72,10 +75,12 @@ void deleteEveryData() {
 void saveHabit(List<Habit> habits) {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) return;
-  FirebaseFirestore.instance
-      .collection("habits")
-      .doc(user.uid)
-      .set({'habits': habits.map((e) => e.toJson()).toList()});
+  Heat.todayHeat = Heat.createTodayHeat();
+  FirebaseFirestore.instance.collection("habits").doc(user.uid).set({
+    'habits': habits.map((e) => e.toJson()).toList(),
+    'heatmap': Heat.heat.map((e) => e.toJson()).toList(),
+    'last_heat': Heat.todayHeat.toJson(),
+  });
 }
 
 void saveNote(List<Note> notes) {
@@ -85,6 +90,24 @@ void saveNote(List<Note> notes) {
       .collection("notes")
       .doc(user.uid)
       .set({'notes': notes.map((e) => e.toJson()).toList()});
+}
+
+void saveMiq(Note miq) {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) return;
+  FirebaseFirestore.instance
+      .collection("miq")
+      .doc(user.uid)
+      .set({'miq': miq.toJson()});
+}
+
+void saveGoal(List<Goal> goals) {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) return;
+  FirebaseFirestore.instance
+      .collection("goals")
+      .doc(user.uid)
+      .set({'goals': goals.map((e) => e.toJson()).toList()});
 }
 
 void saveMeditation() {
@@ -110,12 +133,27 @@ void initMeditation() async {
   if (data == null || !data.containsKey("song")) return;
   audioPlayer.setVolume(data['volume']);
   duration = Duration(seconds: data["duration"]);
-  startBell = data["startBell"];
-  endBell = data["endBell"];
+  startBell = bellToNum(data["startBell"]);
+  endBell = bellToNum(data["endBell"]);
   song = data["song"];
 }
 
-Future<List<Habit>> getHabits() async {
+String bellToNum(String freq) {
+  int? num = int.tryParse(freq);
+  if (num != null) return num.toString();
+  switch (freq) {
+    case 'bell_outside':
+      return '0';
+    case 'bell_struck':
+      return '1';
+    case 'gong':
+      return '2';
+    default:
+      return '3';
+  }
+}
+
+Future<List<Habit>> getHabits(BuildContext context) async {
   List<Habit> list = [];
 
   User? user = FirebaseAuth.instance.currentUser;
@@ -126,17 +164,45 @@ Future<List<Habit>> getHabits() async {
   if (data == null || !data.containsKey("habits")) return list;
 
   var habits = data["habits"].map((e) => Habit.fromJson(e)).toList();
-  for (var habit in habits) {
+  for (Habit habit in habits) {
+    habit.resetHabit(context);
     list.add(habit);
   }
-  return list.toList();
-  //{'habits': habits.map((e) => e.toJson()).toList()}
+  if (data.containsKey("heatmap")) {
+    Heat.heat = [];
+    var objs = data["heatmap"].map((e) => Heat.fromJson(e)).toList();
+    for (var obj in objs) {
+      Heat.heat.add(obj);
+    }
+  }
+  if (data.containsKey("last_heat")) {
+    DateTime d = DateTime.now();
+    final date = DateTime(d.year, d.month, d.day);
 
-  //saveHabit(list); ????????????????????????????????????????????????????????
-  //   .then((QuerySnapshot querySnapshot) {
-  // querySnapshot.docs.forEach((habit) {
-  //   Habit.fromJson(habit.data());
-  // });
+    final lastHeat = Heat.fromJson(data["last_heat"]);
+
+    if (!lastHeat.date.isAtSameMomentAs(date) && lastHeat.did.isNotEmpty)
+      Heat.heat.add(lastHeat);
+  }
+  Heat.todayHeat = Heat.createTodayHeat(givenHabits: list);
+  return list;
+}
+
+Future<List<Goal>> getGoals() async {
+  List<Goal> list = [];
+
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) return list;
+  var goalData =
+      await FirebaseFirestore.instance.collection("goals").doc(user.uid).get();
+  var data = goalData.data();
+  if (data == null || !data.containsKey("goals")) return list;
+
+  var goals = data["goals"].map((e) => Goal.fromJson(e)).toList();
+  for (var goal in goals) {
+    list.add(goal);
+  }
+  return list;
 }
 
 Future<List<Note>> getNotes() async {
@@ -150,10 +216,32 @@ Future<List<Note>> getNotes() async {
   if (data == null || !data.containsKey("notes")) return list;
 
   var notes = data["notes"].map((e) => Note.fromJson(e)).toList();
-  for (var note in notes) {
+  for (Note note in notes) {
+    note.fixQuestions();
     list.add(note);
   }
-  return list.toList();
+  return list;
+}
+
+Future<Note> getMiq() async {
+  final defaultMiq = Note('5', [
+    "miq_1",
+    "miq_2",
+    "miq_3",
+  ], [
+    '',
+    '',
+    ''
+  ]);
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) return defaultMiq;
+
+  var miqData =
+      await FirebaseFirestore.instance.collection("miq").doc(user.uid).get();
+  var data = miqData.data();
+  if (data == null || !data.containsKey("miq")) return defaultMiq;
+
+  return Note.fromJson(data["miq"]);
 }
 
 void saveSettings(bool is24, String firstDay, String darkMode) {
@@ -177,24 +265,39 @@ Future<void> initSettings(BuildContext context) async {
   if (data == null || !data.containsKey("is24")) {
     SettingsScreen.is24 = MediaQuery.of(context).alwaysUse24HourFormat;
     SettingsScreen.firstDay =
-        firstDayToString(MaterialLocalizations.of(context).firstDayOfWeekIndex);
-    SettingsScreen.darkMode = 'Default';
+        MaterialLocalizations.of(context).firstDayOfWeekIndex.toString();
+    SettingsScreen.darkMode = '0';
     return;
   }
   SettingsScreen.is24 = data["is24"];
-  SettingsScreen.firstDay = data["firstDay"];
-  SettingsScreen.darkMode = data["darkMode"];
+  SettingsScreen.firstDay = getFirstDayIndex(data["firstDay"]);
+  SettingsScreen.darkMode = getDarkModeIndex(data["darkMode"]);
   return;
 }
 
-firstDayToString(int day) {
-  switch (day) {
-    case 6:
-      return "Saturday";
-    case 1:
-      return "Monday";
+String getFirstDayIndex(String firstDay) {
+  int? num = int.tryParse(firstDay);
+  if (num != null) return num.toString();
+  switch (firstDay) {
+    case "Saturday":
+      return '6';
+    case "Monday":
+      return '1';
     default:
-      return "Sunday";
+      return '0';
+  }
+}
+
+String getDarkModeIndex(String firstDay) {
+  int? num = int.tryParse(firstDay);
+  if (num != null) return num.toString();
+  switch (firstDay) {
+    case 'Light Mode':
+      return '2';
+    case 'Dark Mode':
+      return '1';
+    default:
+      return '0';
   }
 }
 

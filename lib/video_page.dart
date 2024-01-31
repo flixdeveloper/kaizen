@@ -43,27 +43,29 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: PodVideoPlayer(
-          controller: controller,
-          podPlayerLabels: const PodPlayerLabels(
-            play: "PLAY",
-            pause: "PAUSE",
-            error: "ERROR WHILE TRYING TO PLAY VIDEO",
-            exitFullScreen: "EXIT FULL SCREEN",
-            fullscreen: "FULL SCREEN",
-            loopVideo: "LOOP VIDEO",
-            mute: "MUTE",
-            playbackSpeed: "PLAYBACK SPEED",
-            settings: "SETTINGS",
-            unmute: "UNMUTE",
-            optionEnabled: "YES",
-            optionDisabled: "NO",
-            quality: "QUALITY",
+        appBar: AppBar(),
+        body: Center(
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: PodVideoPlayer(
+              controller: controller,
+              podPlayerLabels: const PodPlayerLabels(
+                play: "PLAY",
+                pause: "PAUSE",
+                error: "ERROR WHILE TRYING TO PLAY VIDEO",
+                exitFullScreen: "EXIT FULL SCREEN",
+                fullscreen: "FULL SCREEN",
+                loopVideo: "LOOP VIDEO",
+                mute: "MUTE",
+                playbackSpeed: "PLAYBACK SPEED",
+                settings: "SETTINGS",
+                unmute: "UNMUTE",
+                optionEnabled: "YES",
+                optionDisabled: "NO",
+                quality: "QUALITY",
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
