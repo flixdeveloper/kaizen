@@ -79,7 +79,8 @@ Widget buildNewNote(
             shape: const CircleBorder(),
             backgroundColor: Colors.blueGrey,
             onPressed: () => {
-              Note(title, questions, answearsForSave(size)).save(),
+              Note(title, questions, answearsForSave(size), DateTime.now())
+                  .save(),
               Navigator.of(context).pop()
             },
             heroTag: null,
@@ -209,7 +210,8 @@ Widget buildUpdateNote(BuildContext context, Note note, {bool isMiq = false}) {
             shape: const CircleBorder(),
             backgroundColor: Colors.blueGrey,
             onPressed: () => {
-              Note(title, questions, answearsForSave(size)).save(update: note),
+              Note(title, questions, answearsForSave(size), DateTime.now())
+                  .save(update: note),
               Navigator.of(context).pop()
             },
             heroTag: null,

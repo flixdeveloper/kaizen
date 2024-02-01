@@ -224,15 +224,15 @@ Future<List<Note>> getNotes() async {
 }
 
 Future<Note> getMiq() async {
-  final defaultMiq = Note('5', [
-    "miq_1",
-    "miq_2",
-    "miq_3",
-  ], [
-    '',
-    '',
-    ''
-  ]);
+  final defaultMiq = Note(
+      '5',
+      [
+        "miq_1",
+        "miq_2",
+        "miq_3",
+      ],
+      ['', '', ''],
+      DateTime.now());
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) return defaultMiq;
 

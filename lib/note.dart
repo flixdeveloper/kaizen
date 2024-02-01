@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaizen/firebase_handle.dart';
 import 'package:kaizen/rounded_base.dart';
@@ -11,19 +10,19 @@ part 'note.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Note {
   String type;
-  late String date;
+  DateTime dateTime;
   List<String> question;
   List<String> answear;
 
-  Note(this.type, this.question, this.answear) {
+  Note(this.type, this.question, this.answear, this.dateTime) {
     this.type = typeToNum();
-    DateTime currentDate = DateTime.now();
-    date = DateFormat('EEEE, MMM d').format(currentDate); //Thursday, Sep 28
+    //this.dateTime = DateTime.now();
+    //date = DateFormat('EEEE, MMM d').format(currentDate); //Thursday, Sep 28
   }
 
   String typeToNum() {
     int? num = int.tryParse(type);
-    if (num != null) return num.toString();
+    if (num != null) return type;
     if (type == 'Note' || type == 'note'.tr()) return '0';
     if (type == 'Evening Review' || type == 'evening_review'.tr()) return '2';
     if (type == 'Weekly Review' || type == 'weekly_review'.tr()) return '3';
@@ -34,8 +33,7 @@ class Note {
 
   void fixQuestions() {
     for (var i = 0; i < question.length; i++) {
-      var q = question[i];
-      switch (q) {
+      switch (question[i]) {
         case "What am I grateful for today?":
           question[i] = 'morning_1';
           break;
@@ -60,7 +58,7 @@ class Note {
         case "Did I live up to my values and principles today?":
           question[i] = 'evening_3';
           break;
-        case "What lessons did I learn from today\"s experiences?":
+        case "What lessons did I learn from today's experiences?":
           question[i] = 'evening_4';
           break;
         case "How can I improve or adjust my approach for tomorrow?":
@@ -101,11 +99,11 @@ class Note {
   }
 
   String getDate(BuildContext context) {
-    DateTime tmpDate = new DateFormat('EEEE, MMM d').parse(date);
+    //DateTime tmpDate = new DateFormat('EEEE, MMM d').parse(date);
 
     final DateFormat formatter =
         DateFormat('EEEE, d MMM', context.locale.toString());
-    final String formatted = formatter.format(tmpDate);
+    final String formatted = formatter.format(dateTime);
     return formatted;
   }
 
