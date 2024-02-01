@@ -167,7 +167,6 @@ class _SettingsScreen extends State<SettingsScreen>
                     showDeleteDialog(context);
                   },
                   child: Text(
-                    //TODO: popup are you sure
                     "delete_account".tr(),
                     style: const TextStyle(
                       color: Color.fromARGB(255, 250, 250, 250),

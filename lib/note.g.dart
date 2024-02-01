@@ -25,7 +25,9 @@ DateTime getDate(Map<String, dynamic> json) {
     return DateTime.parse(json['dateTime'] as String);
   if (json.containsKey('date')) {
     final oldDateString = json['date'] as String;
-    DateTime oldDate = new DateFormat('EEEE, MMM d').parse(oldDateString);
+    DateTime oldDate =
+        new DateFormat('EEEE, MMM d', Locale('en', 'US').toString())
+            .parse(oldDateString);
     return oldDate;
   }
   return DateTime.now();

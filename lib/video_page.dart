@@ -40,13 +40,31 @@ class _VideoPageState extends State<VideoPage> {
     super.dispose();
   }
 
+  bool _isRtl() {
+    final Locale locale = WidgetsBinding.instance.platformDispatcher.locale;
+    final langs = [
+      'ar', // Arabic
+      'fa', // Farsi
+      'he', // Hebrew
+      'ps', // Pashto
+      'ur', // Urdu
+    ];
+    for (int i = 0; i < langs.length; i++) {
+      final lang = langs[i];
+      if (locale.toString().contains(lang)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
         body: Center(
           child: Directionality(
-            textDirection: TextDirection.ltr,
+            textDirection: (_isRtl()) ? TextDirection.rtl : TextDirection.ltr,
             child: PodVideoPlayer(
               controller: controller,
               podPlayerLabels: const PodPlayerLabels(

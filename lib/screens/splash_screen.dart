@@ -116,6 +116,7 @@ class _SplashScreenState extends State<SplashScreen>
                                   sentence[0],
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
+                                      fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: Theme.of(context)
                                           .colorScheme
