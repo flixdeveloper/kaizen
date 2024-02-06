@@ -87,11 +87,11 @@ class _InMeditationScreen extends State<InMeditationScreen>
 
   String translateBell(String bell) {
     switch (bell) {
-      case 'Bell outside':
+      case '0':
         return "bell-outside.wav";
-      case 'Bell struck':
+      case '1':
         return "bowl_struck.wav";
-      case 'Gong':
+      case '2':
         return "gong.wav";
       default:
         return "zenbell.mp3";

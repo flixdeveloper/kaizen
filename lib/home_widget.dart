@@ -1,3 +1,4 @@
+import 'package:auto_direction/auto_direction.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -95,60 +96,69 @@ class HomeWidget {
                               ),
                             ],
                           ),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const SizedBox(),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.black.withOpacity(0.11),
-                                        Colors.black.withOpacity(0.75)
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      stops: const [0.57, 0.95],
-                                    ),
-                                    //color: Theme.of(context)
-                                    //    .colorScheme
-                                    //    .onPrimary
-                                    //    .withOpacity(0.5),
-                                    borderRadius: const BorderRadius.only(
-                                      bottomRight: Radius.circular(20),
-                                      bottomLeft: Radius.circular(20),
-                                    ),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(title,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontFamily: 'Lato',
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                      const SizedBox(height: 10),
-                                      Visibility(
-                                        visible: subTitle != null,
-                                        child: Text(
-                                          subTitle ?? "",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
+                          child: Visibility(
+                              visible: title != '',
+                              child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    const SizedBox(),
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.black.withOpacity(0.11),
+                                              Colors.black.withOpacity(0.75)
+                                            ],
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            stops: const [0.57, 0.95],
+                                          ),
+                                          //color: Theme.of(context)
+                                          //    .colorScheme
+                                          //    .onPrimary
+                                          //    .withOpacity(0.5),
+                                          borderRadius: const BorderRadius.only(
+                                            bottomRight: Radius.circular(20),
+                                            bottomLeft: Radius.circular(20),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ]),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            AutoDirection(
+                                                text: title,
+                                                child: Text(title,
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontFamily: 'Lato',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ))),
+                                            const SizedBox(height: 10),
+                                            Visibility(
+                                                visible: subTitle != null,
+                                                child: AutoDirection(
+                                                  text: subTitle ?? "",
+                                                  child: Text(
+                                                    subTitle ?? "",
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                )),
+                                          ],
+                                        ))
+                                  ])),
                         ),
                     placeholder: (context, url) => Container(),
                     errorWidget: (context, url, error) =>

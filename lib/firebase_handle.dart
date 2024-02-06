@@ -181,10 +181,10 @@ Future<List<Habit>> getHabits(BuildContext context) async {
 
     final lastHeat = Heat.fromJson(data["last_heat"]);
 
-    if (!lastHeat.date.isAtSameMomentAs(date) && lastHeat.did.isNotEmpty)
-      Heat.heat.add(lastHeat);
+    if (!lastHeat.date.isAtSameMomentAs(date)) Heat.heat.add(lastHeat);
   }
   Heat.todayHeat = Heat.createTodayHeat(givenHabits: list);
+  Heat.heat.addAll(Heat.createMissingHeats(context, list));
   return list;
 }
 

@@ -11,6 +11,7 @@ import 'package:kaizen/screens/habits_me_screen.dart';
 import 'package:kaizen/screens/home_screen.dart';
 import 'package:kaizen/screens/login_screen.dart';
 import 'package:kaizen/screens/notes_screen.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,6 +22,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  bool noTimer = false;
   bool didStart = false;
   late Timer timer;
   late Widget nextScreen;
@@ -34,8 +36,12 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> asyncInit() async {
     nextScreen = await getNext(context);
-    timer = Timer(const Duration(seconds: 7), () => replaceScreen());
-    didStart = true;
+    if (noTimer) {
+      replaceScreen();
+    } else {
+      timer = Timer(const Duration(seconds: 7), () => replaceScreen());
+      didStart = true;
+    }
   }
 
   Future<void> replaceScreen() async {
@@ -62,6 +68,7 @@ class _SplashScreenState extends State<SplashScreen>
       body: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
+            noTimer = true;
             if (didStart) {
               replaceScreen();
               timer.cancel();
@@ -87,7 +94,7 @@ class _SplashScreenState extends State<SplashScreen>
               ),
               Expanded(
                   child: Align(
-                alignment: const Alignment(0.0, -0.4),
+                alignment: const Alignment(0.0, -0.22),
                 child: IntrinsicHeight(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,15 +168,28 @@ class _SplashScreenState extends State<SplashScreen>
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.fromLTRB(0, 0, 0, 40), //add padding here
-                  //change padding to be only from bottom?
-                  child: Text(
-                    'TAP TO DISMISS'.tr(),
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
-                  ),
-                ),
+                    padding: const EdgeInsets.fromLTRB(
+                        0, 0, 0, 45), //add padding here
+                    //change padding to be only from bottom?
+                    child: Container(
+                      child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: (noTimer)
+                              ? LoadingAnimationWidget.twistingDots(
+                                  leftDotColor: const Color(0xFF1A1A3F),
+                                  rightDotColor: const Color(0xFFEA3799),
+                                  size: 30,
+                                )
+                              : Text(
+                                  'TAP TO DISMISS'.tr(),
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                )),
+                      height: 70,
+                      width: double.infinity,
+                    )),
               ),
             ],
           )),

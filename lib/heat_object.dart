@@ -80,10 +80,112 @@ class Heat {
     return heat;
   }
 
+  //static Heat latestHeat() {
+  //  Heat latest = heat[heat.length - 1];
+  //  for (var obj in heat) {
+  //    if (latest.date.isBefore(obj.date)) {
+  //      latest = obj;
+  //    }
+  //  }
+  //  return latest;
+  //}
+
+  static List<Heat> createMissingHeats(
+      BuildContext context, List<Habit> givenHabits) {
+    if (heat.isEmpty) return [];
+    List<Heat> missing = [];
+    final startHeat = heat[heat.length - 1];
+    var newDate = startHeat.date.add(const Duration(days: 1));
+    while (newDate.isBefore(todayHeat.date)) {
+      var newHeat = Heat();
+      newHeat.date = newDate;
+      newHeat.total = startHeat.total;
+      for (var obj in startHeat.did) {
+        Habit? habit;
+        for (var isHabit in givenHabits) {
+          if (isHabit.getId() == obj) habit = isHabit;
+        }
+        if (habit != null) {
+          if (newDate
+              .isBefore(habit.nextReset(context, nextFor: startHeat.date))) {
+            newHeat.did.add(obj);
+          }
+        }
+      }
+
+      for (var obj in todayHeat.did) {
+        Habit? habit;
+        for (var isHabit in givenHabits) {
+          if (isHabit.getId() == obj) habit = isHabit;
+        }
+        if (habit != null) {
+          if (!newHeat.did.contains(obj) &&
+              newHeat.total.contains(obj) &&
+              !newDate.isBefore(
+                  habit.lastReset(context, lastFor: startHeat.date))) {
+            newHeat.did.add(obj);
+          }
+        }
+      }
+      missing.add(newHeat);
+      newDate = newDate.add(const Duration(days: 1));
+    }
+    return missing;
+  }
+
   /// Connect the generated [_$HeatFromJson] function to the `fromJson`
   /// factory.
   factory Heat.fromJson(Map<String, dynamic> json) => _$HeatFromJson(json);
 
   /// Connect the generated [_$PersonToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$HeatToJson(this);
+
+  //static List<Heat> createMissingHeats(BuildContext context, List<Habit> givenHabits){
+  //  if (heat.isEmpty) return [];
+  //  List<Heat> missing = [];
+  //  final startHeat = heat[heat.length - 1];
+  //}
+//
+  //static List<Heat> createMissingHeatsAtoB(
+  //    BuildContext context, Heat startHeat, Heat finishHeat, List<Habit> givenHabits) {
+  //  if (heat.isEmpty) return [];
+  //  List<Heat> missing = [];
+  //  //final startHeat = heat[heat.length - 1];
+  //  var newDate = startHeat.date.add(const Duration(days: 1));
+  //  while (newDate.isBefore(finishHeat.date)) {
+  //    var newHeat = Heat();
+  //    newHeat.date = newDate;
+  //    newHeat.total = startHeat.total;
+  //    for (var obj in startHeat.did) {
+  //      Habit? habit;
+  //      for (var isHabit in givenHabits) {
+  //        if (isHabit.getId() == obj) habit = isHabit;
+  //      }
+  //      if (habit != null) {
+  //        if (newDate
+  //            .isBefore(habit.nextReset(context, nextFor: startHeat.date))) {
+  //          newHeat.did.add(obj);
+  //        }
+  //      }
+  //    }
+//
+  //    for (var obj in finishHeat.did) {
+  //      Habit? habit;
+  //      for (var isHabit in givenHabits) {
+  //        if (isHabit.getId() == obj) habit = isHabit;
+  //      }
+  //      if (habit != null) {
+  //        if (!newHeat.did.contains(obj) &&
+  //            newHeat.total.contains(obj) &&
+  //            !newDate.isBefore(
+  //                habit.lastReset(context, lastFor: startHeat.date))) {
+  //          newHeat.did.add(obj);
+  //        }
+  //      }
+  //    }
+  //    missing.add(newHeat);
+  //    newDate = newDate.add(const Duration(days: 1));
+  //  }
+  //  return missing;
+  //}
 }

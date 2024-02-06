@@ -86,9 +86,9 @@ class Habit {
     resetAt = nextReset(context);
   }
 
-  DateTime nextReset(BuildContext context) {
+  DateTime nextReset(BuildContext context, {DateTime? nextFor}) {
     DateTime d = DateTime.now();
-    DateTime now = DateTime(d.year, d.month, d.day);
+    DateTime now = nextFor ?? DateTime(d.year, d.month, d.day);
     switch (frequency) {
       case "0":
         {
@@ -111,9 +111,9 @@ class Habit {
     }
   }
 
-  DateTime lastReset(BuildContext context) {
+  DateTime lastReset(BuildContext context, {DateTime? lastFor}) {
     DateTime d = DateTime.now();
-    DateTime now = DateTime(d.year, d.month, d.day);
+    DateTime now = lastFor ?? DateTime(d.year, d.month, d.day);
     switch (frequency) {
       case "0":
         {

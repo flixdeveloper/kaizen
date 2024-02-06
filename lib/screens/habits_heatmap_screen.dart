@@ -25,26 +25,7 @@ class _HabitsHeatmapScreen extends State<HabitsHeatmapScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:
-            //HeatMap(
-            //    startDate: startDate,
-            //    endDate: DateTime.now(),
-            //    datasets: dataSets,
-            //    colorMode: ColorMode.color,
-            //    defaultColor: Theme.of(context).colorScheme.secondary,
-            //    textColor: Colors.white,
-            //    showColorTip: false,
-            //    showText: true,
-            //    scrollable: true,
-            //    size: 30,
-            //    colorsets: {
-            //  1: Colors.green.shade200,
-            //  2: Colors.green.shade300,
-            //  3: Colors.green.shade400,
-            //  4: Colors.green.shade500,
-            //  5: Colors.green.shade600
-            //})
-            Center(
+        body: Center(
       child: Padding(
         padding: EdgeInsets.fromLTRB(12, 10, 12, 80),
         child: HeatMapCalendar(
@@ -57,10 +38,8 @@ class _HabitsHeatmapScreen extends State<HabitsHeatmapScreen>
           datasets: Heat.heatmap(),
           colorsets: {
             1: Colors.green.shade100,
-            20: Colors.green.shade200,
-            40: Colors.green.shade300,
-            60: Colors.green.shade400,
-            80: Colors.green.shade700,
+            38: Colors.green.shade300,
+            66: Colors.green.shade600,
             100: Colors.green.shade900,
           },
           onClick: (value) {
