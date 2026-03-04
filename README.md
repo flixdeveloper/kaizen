@@ -1,16 +1,20 @@
-# kaizen
+# Kaizen 🧘‍♂️
 
-A new Flutter project.
+**Kaizen** is a personal development mobile application built on the philosophy of continuous improvement. It empowers users to make small, consistent changes in their lives to achieve significant long-term results.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+* **Habit Tracking:** Track and adapt your habits to create positive and lasting routines.
+* **Mindfulness & Meditation:** Practice meditation to reduce stress and increase overall happiness.
+* **Thought Organization:** Take notes and organize your ideas in one centralized location.
+* **Curated Content:** Read motivating articles to learn from experts and peers.
 
-A few resources to get you started if this is your first Flutter project:
+## 📸 Screenshots
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p align="center">
+  <img src="assets/screenshots/screen-0.webp" width="19%" />
+  <img src="assets/screenshots/screen-1.webp" width="19%" />
+  <img src="assets/screenshots/screen-2.webp" width="19%" />
+  <img src="assets/screenshots/screen-3.webp" width="19%" />
+  <img src="assets/screenshots/screen-4.webp" width="19%" />
+</p>
